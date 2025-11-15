@@ -7,6 +7,10 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Auth from "./pages/Auth";
 import Diary from "./pages/Diary";
 import Add from "./pages/Add";
+import AddPhoto from "./pages/AddPhoto";
+import AddSearch from "./pages/AddSearch";
+import AddBarcode from "./pages/AddBarcode";
+import AddVoice from "./pages/AddVoice";
 import Progress from "./pages/Progress";
 import Settings from "./pages/Settings";
 import Recipes from "./pages/Recipes";
@@ -71,6 +75,26 @@ const App = () => (
             <Route path="/add" element={
               <ProtectedRoute>
                 <Add />
+              </ProtectedRoute>
+            } />
+            <Route path="/add/photo" element={
+              <ProtectedRoute>
+                <AddPhoto />
+              </ProtectedRoute>
+            } />
+            <Route path="/add/search" element={
+              <ProtectedRoute>
+                <AddSearch />
+              </ProtectedRoute>
+            } />
+            <Route path="/add/barcode" element={
+              <ProtectedRoute>
+                <AddBarcode />
+              </ProtectedRoute>
+            } />
+            <Route path="/add/voice" element={
+              <ProtectedRoute>
+                <AddVoice />
               </ProtectedRoute>
             } />
             <Route path="/recipes" element={
