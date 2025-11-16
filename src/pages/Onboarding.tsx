@@ -14,15 +14,16 @@ export default function Onboarding() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [checkingProfile, setCheckingProfile] = useState(true);
-  
-  const [formData, setFormData] = useState({
+
+  const [step, setStep] = useState(1);
+  const [form, setForm] = useState({
     gender: '',
     age: '',
     height_cm: '',
     current_weight_kg: '',
     goal_weight_kg: '',
     activity_level: '',
+    weekly_goal_kg: '1',
     daily_calorie_goal: '2000',
     daily_steps_goal: '10000',
     daily_water_goal_ml: '2000',
@@ -30,91 +31,81 @@ export default function Onboarding() {
   });
 
   useEffect(() => {
-    // OnboardingRoute wrapper already handles the profile check,
-    // so we just need to stop the loading state
-    setCheckingProfile(false);
+    // nothing; this route is already guarded by OnboardingRoute
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const next = () => setStep((s) => Math.min(3, s + 1));
+  const back = () => setStep((s) => Math.max(1, s - 1));
+
+  const submit = async () => {
     if (!user) return;
-    
-    // Validate required fields
-    if (!formData.gender || !formData.age || !formData.height_cm || 
-        !formData.current_weight_kg || !formData.goal_weight_kg || !formData.activity_level) {
-      toast({
-        title: 'Missing information',
-        description: 'Please fill in all required fields.',
-        variant: 'destructive',
-      });
+
+    // Basic validation
+    if (!form.gender || !form.age || !form.height_cm || !form.current_weight_kg || !form.goal_weight_kg || !form.activity_level) {
+      toast({ title: 'Missing information', description: 'Please fill required fields.', variant: 'destructive' });
       return;
     }
-    
+
     setLoading(true);
-    
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .insert({
-          id: user.id,
-          gender: formData.gender,
-          age: parseInt(formData.age),
-          height_cm: parseInt(formData.height_cm),
-          current_weight_kg: parseFloat(formData.current_weight_kg),
-          starting_weight_kg: parseFloat(formData.current_weight_kg),
-          goal_weight_kg: parseFloat(formData.goal_weight_kg),
-          activity_level: formData.activity_level,
-          daily_calorie_goal: parseInt(formData.daily_calorie_goal),
-          daily_steps_goal: parseInt(formData.daily_steps_goal),
-          daily_water_goal_ml: parseInt(formData.daily_water_goal_ml),
-          add_burned_calories: formData.add_burned_calories,
-        });
+      // Map UI values to DB values
+      const genderMap: Record<string, string> = {
+        'Male': 'male',
+        'Female': 'female',
+        'Other': 'other',
+      };
+      const activityMap: Record<string, string> = {
+        'Inactive': 'inactive',
+        'Light': 'lightly_active',
+        'Moderate': 'moderately_active',
+        'Active': 'very_active',
+        'Very Active': 'extremely_active',
+      };
+
+      const { error } = await supabase.from('profiles').insert({
+        id: user.id,
+        gender: genderMap[form.gender] || 'other',
+        age: parseInt(String(form.age)),
+        height_cm: parseInt(String(form.height_cm)),
+        current_weight_kg: parseFloat(String(form.current_weight_kg)),
+        starting_weight_kg: parseFloat(String(form.current_weight_kg)),
+        goal_weight_kg: parseFloat(String(form.goal_weight_kg)),
+        activity_level: activityMap[form.activity_level] || 'inactive',
+        weekly_goal_kg: form.weekly_goal_kg,
+        daily_calorie_goal: parseInt(String(form.daily_calorie_goal)),
+        daily_steps_goal: parseInt(String(form.daily_steps_goal)),
+        daily_water_goal_ml: parseInt(String(form.daily_water_goal_ml)),
+        add_burned_calories: form.add_burned_calories,
+      });
 
       if (error) throw error;
 
-      toast({
-        title: 'Profile created!',
-        description: 'Welcome to your nutrition journey.',
-      });
-
+      toast({ title: 'Profile created', description: 'Welcome!' });
       navigate('/', { replace: true });
-    } catch (error: any) {
-      toast({
-        title: 'Error',
-        description: error.message,
-        variant: 'destructive',
-      });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to create profile';
+      toast({ title: 'Error', description: msg, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
   };
 
-  if (checkingProfile) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
+  // Full-screen modal/wizard layout — non-dismissible
   return (
-    <div className="min-h-screen bg-background pb-8">
-      <div className="max-w-screen-sm mx-auto p-4">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold">Welcome!</h1>
-          <p className="text-muted-foreground">Let's set up your profile to get started.</p>
-        </div>
+    <div className="fixed inset-0 z-50 bg-background/95 flex items-center justify-center p-4">
+      <div className="w-full max-w-lg mx-auto">
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold">Onboarding — Step {step} / 3</h2>
+            <div className="text-sm text-muted-foreground">Please complete to continue</div>
+          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Personalization */}
-          <Card className="p-4">
-            <h2 className="font-semibold mb-4">About You</h2>
+          {step === 1 && (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="gender">Gender *</Label>
-                <Select value={formData.gender} onValueChange={(value) => setFormData({ ...formData, gender: value })}>
-                  <SelectTrigger id="gender">
+                <Label>Gender *</Label>
+                <Select value={form.gender} onValueChange={(v) => setForm({ ...form, gender: v })}>
+                  <SelectTrigger>
                     <SelectValue placeholder="Select gender" />
                   </SelectTrigger>
                   <SelectContent>
@@ -126,70 +117,34 @@ export default function Onboarding() {
               </div>
 
               <div>
-                <Label htmlFor="age">Age (years) *</Label>
-                <Input
-                  id="age"
-                  type="number"
-                  value={formData.age}
-                  onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                  placeholder="25"
-                  min="1"
-                  max="120"
-                />
+                <Label>Age *</Label>
+                <Input type="number" value={form.age} onChange={(e) => setForm({ ...form, age: e.target.value })} />
               </div>
 
               <div>
-                <Label htmlFor="height">Height (cm) *</Label>
-                <Input
-                  id="height"
-                  type="number"
-                  value={formData.height_cm}
-                  onChange={(e) => setFormData({ ...formData, height_cm: e.target.value })}
-                  placeholder="170"
-                  min="50"
-                  max="300"
-                />
+                <Label>Height (cm) *</Label>
+                <Input type="number" value={form.height_cm} onChange={(e) => setForm({ ...form, height_cm: e.target.value })} />
+              </div>
+
+              <div>
+                <Label>Current weight (kg) *</Label>
+                <Input type="number" step="0.1" value={form.current_weight_kg} onChange={(e) => setForm({ ...form, current_weight_kg: e.target.value })} />
               </div>
             </div>
-          </Card>
+          )}
 
-          {/* Weight Goals */}
-          <Card className="p-4">
-            <h2 className="font-semibold mb-4">Weight Goals</h2>
+          {step === 2 && (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="current-weight">Current Weight (kg) *</Label>
-                <Input
-                  id="current-weight"
-                  type="number"
-                  step="0.1"
-                  value={formData.current_weight_kg}
-                  onChange={(e) => setFormData({ ...formData, current_weight_kg: e.target.value })}
-                  placeholder="70"
-                  min="20"
-                  max="500"
-                />
+                <Label>Goal weight (kg) *</Label>
+                <Input type="number" step="0.1" value={form.goal_weight_kg} onChange={(e) => setForm({ ...form, goal_weight_kg: e.target.value })} />
               </div>
 
               <div>
-                <Label htmlFor="goal-weight">Goal Weight (kg) *</Label>
-                <Input
-                  id="goal-weight"
-                  type="number"
-                  step="0.1"
-                  value={formData.goal_weight_kg}
-                  onChange={(e) => setFormData({ ...formData, goal_weight_kg: e.target.value })}
-                  placeholder="65"
-                  min="20"
-                  max="500"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="activity">Activity Level *</Label>
-                <Select value={formData.activity_level} onValueChange={(value) => setFormData({ ...formData, activity_level: value })}>
-                  <SelectTrigger id="activity">
-                    <SelectValue placeholder="Select activity level" />
+                <Label>Activity level *</Label>
+                <Select value={form.activity_level} onValueChange={(v) => setForm({ ...form, activity_level: v })}>
+                  <SelectTrigger>
+                    <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Inactive">Inactive</SelectItem>
@@ -200,69 +155,55 @@ export default function Onboarding() {
                   </SelectContent>
                 </Select>
               </div>
-            </div>
-          </Card>
 
-          {/* Daily Goals */}
-          <Card className="p-4">
-            <h2 className="font-semibold mb-4">Daily Goals</h2>
+              <div>
+                <Label>Weekly goal (kg)</Label>
+                <Input type="number" value={form.weekly_goal_kg} onChange={(e) => setForm({ ...form, weekly_goal_kg: e.target.value })} />
+                <div className="text-xs text-muted-foreground">Default is 1 kg/week</div>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="calories">Daily Calories (kcal)</Label>
-                <Input
-                  id="calories"
-                  type="number"
-                  value={formData.daily_calorie_goal}
-                  onChange={(e) => setFormData({ ...formData, daily_calorie_goal: e.target.value })}
-                  placeholder="2000"
-                  min="500"
-                  max="10000"
-                />
+                <Label>Daily calorie goal (kcal)</Label>
+                <Input type="number" value={form.daily_calorie_goal} onChange={(e) => setForm({ ...form, daily_calorie_goal: e.target.value })} />
               </div>
 
               <div>
-                <Label htmlFor="steps">Daily Steps</Label>
-                <Input
-                  id="steps"
-                  type="number"
-                  value={formData.daily_steps_goal}
-                  onChange={(e) => setFormData({ ...formData, daily_steps_goal: e.target.value })}
-                  placeholder="10000"
-                  min="0"
-                  max="100000"
-                />
+                <Label>Daily steps goal</Label>
+                <Input type="number" value={form.daily_steps_goal} onChange={(e) => setForm({ ...form, daily_steps_goal: e.target.value })} />
               </div>
 
               <div>
-                <Label htmlFor="water">Daily Water (ml)</Label>
-                <Input
-                  id="water"
-                  type="number"
-                  value={formData.daily_water_goal_ml}
-                  onChange={(e) => setFormData({ ...formData, daily_water_goal_ml: e.target.value })}
-                  placeholder="2000"
-                  min="0"
-                  max="10000"
-                />
+                <Label>Daily water (ml)</Label>
+                <Input type="number" value={form.daily_water_goal_ml} onChange={(e) => setForm({ ...form, daily_water_goal_ml: e.target.value })} />
               </div>
 
-              <div className="flex items-center justify-between py-2">
-                <Label htmlFor="burned-calories" className="font-normal">
-                  Add burned calories to budget
-                </Label>
-                <Switch
-                  id="burned-calories"
-                  checked={formData.add_burned_calories}
-                  onCheckedChange={(checked) => setFormData({ ...formData, add_burned_calories: checked })}
-                />
+              <div className="flex items-center justify-between">
+                <Label>Add burned calories to budget</Label>
+                <Switch checked={form.add_burned_calories} onCheckedChange={(v) => setForm({ ...form, add_burned_calories: v })} />
               </div>
             </div>
-          </Card>
+          )}
 
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Creating Profile...' : 'Get Started'}
-          </Button>
-        </form>
+          {/* Navigation Buttons */}
+          <div className="flex items-center justify-between mt-6">
+            <div>
+              {step > 1 && (
+                <Button variant="outline" onClick={back} className="mr-2">Back</Button>
+              )}
+            </div>
+            <div className="flex-1 text-right">
+              {step < 3 ? (
+                <Button onClick={next}>Next</Button>
+              ) : (
+                <Button onClick={submit} disabled={loading}>{loading ? 'Saving...' : 'Submit'}</Button>
+              )}
+            </div>
+          </div>
+        </Card>
       </div>
     </div>
   );

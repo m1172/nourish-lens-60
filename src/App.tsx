@@ -17,6 +17,7 @@ import Progress from "./pages/Progress";
 import Settings from "./pages/Settings";
 import Recipes from "./pages/Recipes";
 import NotFound from "./pages/NotFound";
+import OnboardingModal from "./components/OnboardingModal";
 
 const queryClient = new QueryClient();
 
@@ -123,6 +124,8 @@ const App = () => (
             } />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          {/* Modal renderer: show onboarding as a modal when ?onboarding=1 is present */}
+          <OnboardingModal />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

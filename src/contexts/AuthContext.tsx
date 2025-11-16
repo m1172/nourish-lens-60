@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -22,13 +28,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
 
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -42,19 +48,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string) => {
     const redirectUrl = `${window.location.origin}/`;
-    
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: redirectUrl
-      }
+        emailRedirectTo: redirectUrl,
+      },
     });
-    
+
     if (!error) {
-      navigate('/onboarding');
+      // Navigate to home and open onboarding as a modal via query param
+      navigate('/?onboarding=1');
     }
-    
+
     return { error };
   };
 
@@ -63,7 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       password,
     });
-    
+
     if (!error && data.user) {
       // Check if user has a profile
       const { data: profile } = await supabase
@@ -71,24 +78,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .select('id')
         .eq('id', data.user.id)
         .maybeSingle();
-      
+
       if (profile) {
         navigate('/');
       } else {
         navigate('/onboarding');
       }
     }
-    
+
     return { error };
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    navigate('/auth');
+    try {
+      // Sign out from Supabase (local scope only to avoid 403 errors)
+      await supabase.auth.signOut({ scope: 'local' });
+    } catch (error) {
+      // Log but don't throw - we still want to clear local state and navigate
+      console.error('Sign out error:', error);
+    } finally {
+      // Always clear local state and navigate, regardless of Supabase response
+      setUser(null);
+      setSession(null);
+      navigate('/auth');
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, signUp, signIn, signOut, loading }}>
+    <AuthContext.Provider
+      value={{ user, session, signUp, signIn, signOut, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
