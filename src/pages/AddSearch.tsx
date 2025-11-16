@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import BottomNav from '@/components/BottomNav';
+// BottomNav moved to App layout
 
 type Food = {
   id: string;
@@ -46,8 +46,8 @@ export default function AddSearch() {
       setResults(data || []);
     } catch (err: any) {
       toast({
-        variant: "destructive",
-        title: "Error",
+        variant: 'destructive',
+        title: 'Error',
         description: err.message,
       });
     } finally {
@@ -65,7 +65,7 @@ export default function AddSearch() {
 
     try {
       const multiplier = quantity / selectedFood.serving_size;
-      
+
       const { data: meal, error: mealError } = await supabase
         .from('meals')
         .insert({
@@ -78,86 +78,90 @@ export default function AddSearch() {
 
       if (mealError) throw mealError;
 
-      const { error: itemsError } = await supabase
-        .from('meal_items')
-        .insert({
-          meal_id: meal.id,
-          food_id: selectedFood.id,
-          calories: Math.round(selectedFood.calories * multiplier),
-          protein: selectedFood.protein * multiplier,
-          carbs: selectedFood.carbs * multiplier,
-          fats: selectedFood.fats * multiplier,
-          quantity: quantity,
-        });
+      const { error: itemsError } = await supabase.from('meal_items').insert({
+        meal_id: meal.id,
+        food_id: selectedFood.id,
+        calories: Math.round(selectedFood.calories * multiplier),
+        protein: selectedFood.protein * multiplier,
+        carbs: selectedFood.carbs * multiplier,
+        fats: selectedFood.fats * multiplier,
+        quantity: quantity,
+      });
 
       if (itemsError) throw itemsError;
 
       toast({
-        title: "Success",
-        description: "Meal saved to your diary",
+        title: 'Success',
+        description: 'Meal saved to your diary',
       });
-      
+
       navigate('/');
     } catch (err: any) {
       toast({
-        variant: "destructive",
-        title: "Error",
+        variant: 'destructive',
+        title: 'Error',
         description: err.message,
       });
     }
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-screen-sm mx-auto p-4 space-y-4">
-        <h1 className="text-2xl font-bold">Search Foods</h1>
+    <div className='min-h-screen bg-background pb-20'>
+      <div className='max-w-screen-sm mx-auto p-4 space-y-4'>
+        <h1 className='text-2xl font-bold'>Search Foods</h1>
 
-        <div className="flex gap-2">
+        <div className='flex gap-2'>
           <Input
-            placeholder="Search for food..."
+            placeholder='Search for food...'
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && searchFoods()}
           />
           <Button onClick={searchFoods} disabled={loading}>
-            <Search className="h-4 w-4" />
+            <Search className='h-4 w-4' />
           </Button>
         </div>
 
         {selectedFood ? (
-          <Card className="p-4 space-y-4">
+          <Card className='p-4 space-y-4'>
             <div>
-              <h3 className="font-semibold text-lg">{selectedFood.name}</h3>
+              <h3 className='font-semibold text-lg'>{selectedFood.name}</h3>
               {selectedFood.brand && (
-                <p className="text-sm text-muted-foreground">{selectedFood.brand}</p>
+                <p className='text-sm text-muted-foreground'>
+                  {selectedFood.brand}
+                </p>
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className='grid grid-cols-2 gap-2 text-sm'>
               <div>
-                <span className="text-muted-foreground">Calories:</span>
-                <span className="ml-2 font-medium">{selectedFood.calories}</span>
+                <span className='text-muted-foreground'>Calories:</span>
+                <span className='ml-2 font-medium'>
+                  {selectedFood.calories}
+                </span>
               </div>
               <div>
-                <span className="text-muted-foreground">Protein:</span>
-                <span className="ml-2 font-medium">{selectedFood.protein}g</span>
+                <span className='text-muted-foreground'>Protein:</span>
+                <span className='ml-2 font-medium'>
+                  {selectedFood.protein}g
+                </span>
               </div>
               <div>
-                <span className="text-muted-foreground">Carbs:</span>
-                <span className="ml-2 font-medium">{selectedFood.carbs}g</span>
+                <span className='text-muted-foreground'>Carbs:</span>
+                <span className='ml-2 font-medium'>{selectedFood.carbs}g</span>
               </div>
               <div>
-                <span className="text-muted-foreground">Fats:</span>
-                <span className="ml-2 font-medium">{selectedFood.fats}g</span>
+                <span className='text-muted-foreground'>Fats:</span>
+                <span className='ml-2 font-medium'>{selectedFood.fats}g</span>
               </div>
             </div>
 
             <div>
-              <label className="text-sm text-muted-foreground">
+              <label className='text-sm text-muted-foreground'>
                 Quantity ({selectedFood.serving_unit})
               </label>
               <Input
-                type="number"
+                type='number'
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
                 min={0.1}
@@ -165,29 +169,36 @@ export default function AddSearch() {
               />
             </div>
 
-            <div className="flex gap-2">
-              <Button onClick={() => setSelectedFood(null)} variant="outline" className="flex-1">
+            <div className='flex gap-2'>
+              <Button
+                onClick={() => setSelectedFood(null)}
+                variant='outline'
+                className='flex-1'
+              >
                 Back
               </Button>
-              <Button onClick={saveMeal} className="flex-1">
+              <Button onClick={saveMeal} className='flex-1'>
                 Save
               </Button>
             </div>
           </Card>
         ) : (
-          <div className="space-y-2">
+          <div className='space-y-2'>
             {results.map((food) => (
               <Card
                 key={food.id}
-                className="p-4 cursor-pointer hover:bg-muted/50 transition-colors"
+                className='p-4 cursor-pointer hover:bg-muted/50 transition-colors'
                 onClick={() => selectFood(food)}
               >
-                <div className="font-medium">{food.name}</div>
+                <div className='font-medium'>{food.name}</div>
                 {food.brand && (
-                  <div className="text-sm text-muted-foreground">{food.brand}</div>
+                  <div className='text-sm text-muted-foreground'>
+                    {food.brand}
+                  </div>
                 )}
-                <div className="text-sm text-muted-foreground">
-                  {food.calories} kcal per {food.serving_size} {food.serving_unit}
+                <div className='text-sm text-muted-foreground'>
+                  {food.calories} kcal per {food.serving_size}{' '}
+                  {food.serving_unit}
                 </div>
               </Card>
             ))}
@@ -195,7 +206,7 @@ export default function AddSearch() {
         )}
       </div>
 
-      <BottomNav />
+      {/* BottomNav rendered globally in App.tsx */}
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Camera, Loader2, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import BottomNav from '@/components/BottomNav';
+// BottomNav moved to App layout
 
 type SuggestedItem = {
   name: string;
@@ -53,40 +53,47 @@ export default function AddPhoto() {
 
       const imageUrl = publicData.publicUrl;
 
-      const { data, error } = await supabase.functions.invoke('food-from-image', {
-        body: { imageUrl },
-      });
+      const { data, error } = await supabase.functions.invoke(
+        'food-from-image',
+        {
+          body: { imageUrl },
+        }
+      );
 
       if (error) throw error;
 
       setSuggestions(data.items || []);
-      
+
       if (!data.items || data.items.length === 0) {
         toast({
-          title: "No food detected",
-          description: "Try taking a clearer photo of your meal",
+          title: 'No food detected',
+          description: 'Try taking a clearer photo of your meal',
         });
       }
     } catch (err: any) {
       console.error(err);
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: err.message ?? "Failed to analyze image",
+        variant: 'destructive',
+        title: 'Error',
+        description: err.message ?? 'Failed to analyze image',
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const updateItem = (index: number, field: keyof SuggestedItem, value: number) => {
-    setSuggestions(prev => prev.map((item, i) => 
-      i === index ? { ...item, [field]: value } : item
-    ));
+  const updateItem = (
+    index: number,
+    field: keyof SuggestedItem,
+    value: number
+  ) => {
+    setSuggestions((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
   };
 
   const removeItem = (index: number) => {
-    setSuggestions(prev => prev.filter((_, i) => i !== index));
+    setSuggestions((prev) => prev.filter((_, i) => i !== index));
   };
 
   const saveMeal = async () => {
@@ -106,7 +113,7 @@ export default function AddPhoto() {
 
       if (mealError) throw mealError;
 
-      const itemsPayload = suggestions.map(s => ({
+      const itemsPayload = suggestions.map((s) => ({
         meal_id: meal.id,
         calories: s.calories,
         protein: s.protein,
@@ -122,41 +129,41 @@ export default function AddPhoto() {
       if (itemsError) throw itemsError;
 
       toast({
-        title: "Success",
-        description: "Meal saved to your diary",
+        title: 'Success',
+        description: 'Meal saved to your diary',
       });
-      
+
       navigate('/');
     } catch (err: any) {
       toast({
-        variant: "destructive",
-        title: "Error",
+        variant: 'destructive',
+        title: 'Error',
         description: err.message,
       });
     }
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <div className="max-w-screen-sm mx-auto p-4 space-y-4">
-        <h1 className="text-2xl font-bold">Log with Photo</h1>
+    <div className='min-h-screen bg-background pb-20'>
+      <div className='max-w-screen-sm mx-auto p-4 space-y-4'>
+        <h1 className='text-2xl font-bold'>Log with Photo</h1>
 
-        <label className="block">
+        <label className='block'>
           <Input
-            type="file"
-            accept="image/*"
-            capture="environment"
+            type='file'
+            accept='image/*'
+            capture='environment'
             onChange={handleFileChange}
-            className="hidden"
-            id="photo-input"
+            className='hidden'
+            id='photo-input'
           />
           <Button
-            variant="outline"
-            className="w-full h-48 border-2 border-dashed"
+            variant='outline'
+            className='w-full h-48 border-2 border-dashed'
             onClick={() => document.getElementById('photo-input')?.click()}
           >
-            <div className="flex flex-col items-center gap-2">
-              <Camera className="h-8 w-8" />
+            <div className='flex flex-col items-center gap-2'>
+              <Camera className='h-8 w-8' />
               <span>{preview ? 'Change Photo' : 'Take or Upload Photo'}</span>
             </div>
           </Button>
@@ -165,19 +172,19 @@ export default function AddPhoto() {
         {preview && (
           <img
             src={preview}
-            alt="preview"
-            className="w-full rounded-xl object-cover max-h-64"
+            alt='preview'
+            className='w-full rounded-xl object-cover max-h-64'
           />
         )}
 
         <Button
           disabled={!file || loading}
           onClick={uploadAndAnalyze}
-          className="w-full"
+          className='w-full'
         >
           {loading ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className='mr-2 h-4 w-4 animate-spin' />
               Analyzing...
             </>
           ) : (
@@ -186,73 +193,83 @@ export default function AddPhoto() {
         </Button>
 
         {suggestions.length > 0 && (
-          <div className="space-y-3">
-            <h2 className="font-semibold text-lg">Detected Foods</h2>
+          <div className='space-y-3'>
+            <h2 className='font-semibold text-lg'>Detected Foods</h2>
             {suggestions.map((item, idx) => (
-              <Card key={idx} className="p-4">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="font-medium">{item.name}</div>
+              <Card key={idx} className='p-4'>
+                <div className='flex items-start justify-between mb-2'>
+                  <div className='font-medium'>{item.name}</div>
                   <Button
-                    variant="ghost"
-                    size="sm"
+                    variant='ghost'
+                    size='sm'
                     onClick={() => removeItem(idx)}
                   >
-                    <X className="h-4 w-4" />
+                    <X className='h-4 w-4' />
                   </Button>
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className='grid grid-cols-2 gap-2 text-sm'>
                   <div>
-                    <label className="text-muted-foreground">Grams</label>
+                    <label className='text-muted-foreground'>Grams</label>
                     <Input
-                      type="number"
+                      type='number'
                       value={item.grams}
-                      onChange={(e) => updateItem(idx, 'grams', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateItem(idx, 'grams', Number(e.target.value))
+                      }
                     />
                   </div>
                   <div>
-                    <label className="text-muted-foreground">Calories</label>
+                    <label className='text-muted-foreground'>Calories</label>
                     <Input
-                      type="number"
+                      type='number'
                       value={item.calories}
-                      onChange={(e) => updateItem(idx, 'calories', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateItem(idx, 'calories', Number(e.target.value))
+                      }
                     />
                   </div>
                   <div>
-                    <label className="text-muted-foreground">Protein (g)</label>
+                    <label className='text-muted-foreground'>Protein (g)</label>
                     <Input
-                      type="number"
+                      type='number'
                       value={item.protein}
-                      onChange={(e) => updateItem(idx, 'protein', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateItem(idx, 'protein', Number(e.target.value))
+                      }
                     />
                   </div>
                   <div>
-                    <label className="text-muted-foreground">Carbs (g)</label>
+                    <label className='text-muted-foreground'>Carbs (g)</label>
                     <Input
-                      type="number"
+                      type='number'
                       value={item.carbs}
-                      onChange={(e) => updateItem(idx, 'carbs', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateItem(idx, 'carbs', Number(e.target.value))
+                      }
                     />
                   </div>
                   <div>
-                    <label className="text-muted-foreground">Fats (g)</label>
+                    <label className='text-muted-foreground'>Fats (g)</label>
                     <Input
-                      type="number"
+                      type='number'
                       value={item.fats}
-                      onChange={(e) => updateItem(idx, 'fats', Number(e.target.value))}
+                      onChange={(e) =>
+                        updateItem(idx, 'fats', Number(e.target.value))
+                      }
                     />
                   </div>
                 </div>
               </Card>
             ))}
 
-            <Button onClick={saveMeal} className="w-full">
+            <Button onClick={saveMeal} className='w-full'>
               Save Meal
             </Button>
           </div>
         )}
       </div>
 
-      <BottomNav />
+      {/* BottomNav rendered globally in App.tsx */}
     </div>
   );
 }
