@@ -30,25 +30,10 @@ export default function Onboarding() {
   });
 
   useEffect(() => {
-    checkExistingProfile();
-  }, [user]);
-
-  const checkExistingProfile = async () => {
-    if (!user) return;
-    
-    const { data } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('id', user.id)
-      .maybeSingle();
-    
-    if (data) {
-      // Profile exists, redirect to home
-      navigate('/', { replace: true });
-    } else {
-      setCheckingProfile(false);
-    }
-  };
+    // OnboardingRoute wrapper already handles the profile check,
+    // so we just need to stop the loading state
+    setCheckingProfile(false);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
