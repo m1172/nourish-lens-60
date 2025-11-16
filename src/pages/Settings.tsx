@@ -7,6 +7,11 @@ import { Card } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from '@/hooks/use-toast';
 
 export default function Settings() {
   const { user, signOut } = useAuth();
@@ -36,6 +41,30 @@ export default function Settings() {
     loadProfile();
   };
 
+  const updateProfile = async (updates: any) => {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', user?.id);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Updated successfully',
+        description: 'Your profile has been updated.',
+      });
+
+      loadProfile();
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background pb-20">
       <div className="max-w-screen-sm mx-auto">
@@ -60,29 +89,104 @@ export default function Settings() {
           <div>
             <h2 className="text-sm font-semibold text-muted-foreground px-4 mb-2">Daily Goals</h2>
             <Card className="divide-y">
-              <button className="w-full flex items-center justify-between p-4">
-                <span className="font-medium">Calories & macros</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">{profile?.daily_calorie_goal || 1753} kcal</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-between p-4">
+                    <span className="font-medium">Calories & macros</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{profile?.daily_calorie_goal || 1753} kcal</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Daily Calorie Goal</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="calories">Calories (kcal)</Label>
+                      <Input
+                        id="calories"
+                        type="number"
+                        defaultValue={profile?.daily_calorie_goal}
+                        onBlur={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (value && value !== profile?.daily_calorie_goal) {
+                            updateProfile({ daily_calorie_goal: value });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
               
-              <button className="w-full flex items-center justify-between p-4">
-                <span className="font-medium">Steps</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">{profile?.daily_steps_goal || 9000} steps</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-between p-4">
+                    <span className="font-medium">Steps</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{profile?.daily_steps_goal || 9000} steps</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Daily Steps Goal</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="steps">Steps</Label>
+                      <Input
+                        id="steps"
+                        type="number"
+                        defaultValue={profile?.daily_steps_goal}
+                        onBlur={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (value && value !== profile?.daily_steps_goal) {
+                            updateProfile({ daily_steps_goal: value });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
-              <button className="w-full flex items-center justify-between p-4">
-                <span className="font-medium">Hydration</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">{profile?.daily_water_goal_ml || 3000} ml</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-between p-4">
+                    <span className="font-medium">Hydration</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{profile?.daily_water_goal_ml || 3000} ml</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Daily Water Goal</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="water">Water (ml)</Label>
+                      <Input
+                        id="water"
+                        type="number"
+                        defaultValue={profile?.daily_water_goal_ml}
+                        onBlur={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (value && value !== profile?.daily_water_goal_ml) {
+                            updateProfile({ daily_water_goal_ml: value });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
               <div className="w-full flex items-center justify-between p-4">
                 <span className="font-medium">Add Burned Calories</span>
@@ -98,37 +202,115 @@ export default function Settings() {
           <div>
             <h2 className="text-sm font-semibold text-muted-foreground px-4 mb-2">Plan</h2>
             <Card className="divide-y">
-              <button className="w-full flex items-center justify-between p-4">
+              <div className="w-full flex items-center justify-between p-4">
                 <span className="font-medium">Weekly Goal</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">1 kg per week</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+                <span className="text-muted-foreground">1 kg per week</span>
+              </div>
 
-              <button className="w-full flex items-center justify-between p-4">
-                <span className="font-medium">Activity Level</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">{profile?.activity_level || 'Inactive'}</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-between p-4">
+                    <span className="font-medium">Activity Level</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{profile?.activity_level || 'Inactive'}</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Activity Level</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="activity">Activity Level</Label>
+                      <Select
+                        defaultValue={profile?.activity_level}
+                        onValueChange={(value) => updateProfile({ activity_level: value })}
+                      >
+                        <SelectTrigger id="activity">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Inactive">Inactive</SelectItem>
+                          <SelectItem value="Light">Light</SelectItem>
+                          <SelectItem value="Moderate">Moderate</SelectItem>
+                          <SelectItem value="Active">Active</SelectItem>
+                          <SelectItem value="Very Active">Very Active</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
-              <button className="w-full flex items-center justify-between p-4">
-                <span className="font-medium">Current Weight</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">{profile?.current_weight_kg || 93} kg</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-between p-4">
+                    <span className="font-medium">Current Weight</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{profile?.current_weight_kg || 93} kg</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Current Weight</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="current-weight">Weight (kg)</Label>
+                      <Input
+                        id="current-weight"
+                        type="number"
+                        step="0.1"
+                        defaultValue={profile?.current_weight_kg}
+                        onBlur={(e) => {
+                          const value = parseFloat(e.target.value);
+                          if (value && value !== profile?.current_weight_kg) {
+                            updateProfile({ current_weight_kg: value });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
-              <button className="w-full flex items-center justify-between p-4">
-                <span className="font-medium">Goal Weight</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">{profile?.goal_weight_kg || 80} kg</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-between p-4">
+                    <span className="font-medium">Goal Weight</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{profile?.goal_weight_kg || 80} kg</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Goal Weight</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="goal-weight">Weight (kg)</Label>
+                      <Input
+                        id="goal-weight"
+                        type="number"
+                        step="0.1"
+                        defaultValue={profile?.goal_weight_kg}
+                        onBlur={(e) => {
+                          const value = parseFloat(e.target.value);
+                          if (value && value !== profile?.goal_weight_kg) {
+                            updateProfile({ goal_weight_kg: value });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </Card>
           </div>
 
@@ -136,29 +318,106 @@ export default function Settings() {
           <div>
             <h2 className="text-sm font-semibold text-muted-foreground px-4 mb-2">Personalization</h2>
             <Card className="divide-y">
-              <button className="w-full flex items-center justify-between p-4">
-                <span className="font-medium">Gender</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">{profile?.gender || 'Male'}</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-between p-4">
+                    <span className="font-medium">Gender</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{profile?.gender || 'Male'}</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Gender</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="gender">Gender</Label>
+                      <Select
+                        defaultValue={profile?.gender}
+                        onValueChange={(value) => updateProfile({ gender: value })}
+                      >
+                        <SelectTrigger id="gender">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Male">Male</SelectItem>
+                          <SelectItem value="Female">Female</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
-              <button className="w-full flex items-center justify-between p-4">
-                <span className="font-medium">Age</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">{profile?.age || 24}</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-between p-4">
+                    <span className="font-medium">Age</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{profile?.age || 24}</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Age</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="age">Age (years)</Label>
+                      <Input
+                        id="age"
+                        type="number"
+                        defaultValue={profile?.age}
+                        onBlur={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (value && value !== profile?.age) {
+                            updateProfile({ age: value });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
-              <button className="w-full flex items-center justify-between p-4">
-                <span className="font-medium">Height</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">{profile?.height_cm || 170} cm</span>
-                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                </div>
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="w-full flex items-center justify-between p-4">
+                    <span className="font-medium">Height</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-muted-foreground">{profile?.height_cm || 170} cm</span>
+                      <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                    </div>
+                  </button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Height</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="height">Height (cm)</Label>
+                      <Input
+                        id="height"
+                        type="number"
+                        defaultValue={profile?.height_cm}
+                        onBlur={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (value && value !== profile?.height_cm) {
+                            updateProfile({ height_cm: value });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </Card>
           </div>
 

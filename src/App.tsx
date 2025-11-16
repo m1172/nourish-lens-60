@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Auth from "./pages/Auth";
+import Onboarding from "./pages/Onboarding";
 import Diary from "./pages/Diary";
 import Add from "./pages/Add";
 import AddPhoto from "./pages/AddPhoto";
@@ -66,6 +67,11 @@ const App = () => (
               <PublicRoute>
                 <Auth />
               </PublicRoute>
+            } />
+            <Route path="/onboarding" element={
+              <ProtectedRoute>
+                <Onboarding />
+              </ProtectedRoute>
             } />
             <Route path="/" element={
               <ProtectedRoute>
