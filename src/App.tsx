@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { OnboardingRoute } from "./components/OnboardingRoute";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
 import Diary from "./pages/Diary";
@@ -70,7 +71,9 @@ const App = () => (
             } />
             <Route path="/onboarding" element={
               <ProtectedRoute>
-                <Onboarding />
+                <OnboardingRoute>
+                  <Onboarding />
+                </OnboardingRoute>
               </ProtectedRoute>
             } />
             <Route path="/" element={
