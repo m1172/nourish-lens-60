@@ -31,25 +31,38 @@ export default function Onboarding() {
 
   const totalSteps = 15;
   const [customizingProgress, setCustomizingProgress] = useState(0);
+  const [visibleItems, setVisibleItems] = useState<number[]>([]);
   const progress = ((step + 1) / totalSteps) * 100;
 
   const next = () => setStep((s) => Math.min(totalSteps - 1, s + 1));
   const back = () => setStep((s) => Math.max(0, s - 1));
 
-  // Simulate customizing progress
+  // Simulate customizing progress with staggered item reveal
   useEffect(() => {
     if (step === 12) {
       setCustomizingProgress(0);
+      setVisibleItems([]);
+
+      // Stagger item visibility - each item appears before its progress bar fills
+      const itemDelay = 1000; // 800ms between each item appearing
+      for (let i = 0; i < 4; i++) {
+        setTimeout(() => {
+          setVisibleItems((prev) => [...prev, i]);
+        }, i * itemDelay);
+      }
+
+      // Start progress filling for each item
       const interval = setInterval(() => {
         setCustomizingProgress((prev) => {
           if (prev >= 100) {
             clearInterval(interval);
-            setTimeout(() => next(), 500);
+            setTimeout(() => next(), 800);
             return 100;
           }
-          return prev + 10;
+          return prev + 5;
         });
-      }, 200);
+      }, 500);
+
       return () => clearInterval(interval);
     }
   }, [step]);
@@ -1041,32 +1054,89 @@ export default function Onboarding() {
                           ? 'Taken into account'
                           : 'None',
                     },
-                  ].map((item, idx) => (
-                    <div key={item.label} className='space-y-2'>
-                      <div className='flex justify-between items-center'>
-                        <span className='text-muted-foreground'>
-                          {item.label}:
-                        </span>
-                        <div className='flex items-center gap-2'>
-                          <span className='font-semibold'>{item.detail}</span>
-                          {customizingProgress > idx * 25 && (
-                            <Check className='w-5 h-5 text-primary' />
-                          )}
+                  ].map((item, idx) => {
+                    const itemProgress = Math.max(
+                      0,
+                      customizingProgress - idx * 25
+                    );
+                    const isComplete = customizingProgress > idx * 25 + 25;
+                    const isProcessing = itemProgress > 0 && itemProgress <= 25;
+
+                    return (
+                      <div
+                        key={item.label}
+                        className='space-y-2 transition-all duration-500'
+                        style={{
+                          opacity: visibleItems.includes(idx) ? 1 : 0,
+                          transform: visibleItems.includes(idx)
+                            ? 'translateY(0)'
+                            : 'translateY(10px)',
+                          transitionDelay: `${idx * 0.1}s`,
+                        }}
+                      >
+                        <div className='flex justify-between items-center'>
+                          <span className='text-muted-foreground'>
+                            {item.label}:
+                          </span>
+                          <div className='flex items-center gap-2'>
+                            <span className='font-semibold'>{item.detail}</span>
+                            {isProcessing && (
+                              <div className='relative w-5 h-5'>
+                                <svg className='w-5 h-5' viewBox='0 0 24 24'>
+                                  {/* Background circle */}
+                                  <circle
+                                    cx='12'
+                                    cy='12'
+                                    r='10'
+                                    fill='none'
+                                    stroke='currentColor'
+                                    strokeWidth='4'
+                                    className='text-muted-foreground/30'
+                                  />
+                                  {/* Filling circle */}
+                                  <circle
+                                    cx='12'
+                                    cy='12'
+                                    r='10'
+                                    fill='none'
+                                    stroke='currentColor'
+                                    strokeWidth='4'
+                                    className='text-primary transition-all duration-500'
+                                    style={{
+                                      strokeDasharray: `${2 * Math.PI * 10}`,
+                                      strokeDashoffset: `${
+                                        2 *
+                                        Math.PI *
+                                        10 *
+                                        (1 - itemProgress / 25)
+                                      }`,
+                                      strokeLinecap: 'round',
+                                      transform: 'rotate(-90deg)',
+                                      transformOrigin: '12px 12px',
+                                    }}
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                            {isComplete && (
+                              <Check className='w-5 h-5 text-primary' />
+                            )}
+                          </div>
+                        </div>
+                        <div className='h-2 bg-muted rounded-full overflow-hidden'>
+                          <div
+                            className='h-full bg-primary transition-all duration-500'
+                            style={{
+                              width: `${Math.min(
+                                100,
+                                Math.max(0, itemProgress * 4)
+                              )}%`,
+                            }}
+                          />
                         </div>
                       </div>
-                      <div className='h-2 bg-muted rounded-full overflow-hidden'>
-                        <div
-                          className='h-full bg-primary transition-all duration-300'
-                          style={{
-                            width: `${Math.min(
-                              100,
-                              Math.max(0, (customizingProgress - idx * 25) * 4)
-                            )}%`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
