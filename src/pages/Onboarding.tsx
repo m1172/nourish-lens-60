@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
-import { ArrowLeft, ThumbsUp, Heart } from 'lucide-react';
+import { ArrowLeft, ThumbsUp, Heart, Target, Check } from 'lucide-react';
 
 export default function Onboarding() {
   const { user } = useAuth();
@@ -20,19 +20,39 @@ export default function Onboarding() {
     current_weight_kg: 70,
     goal_weight_kg: 65,
     activity_level: '',
-    weekly_goal_kg: '0.5',
+    weekly_goal_kg: 0.5,
     daily_calorie_goal: '2000',
     daily_steps_goal: '10000',
     daily_water_goal_ml: '2000',
     add_burned_calories: false,
     health_conditions: [] as string[],
+    program_steps: [] as string[],
   });
 
-  const totalSteps = 10;
+  const totalSteps = 15;
+  const [customizingProgress, setCustomizingProgress] = useState(0);
   const progress = ((step + 1) / totalSteps) * 100;
 
   const next = () => setStep((s) => Math.min(totalSteps - 1, s + 1));
   const back = () => setStep((s) => Math.max(0, s - 1));
+
+  // Simulate customizing progress
+  useEffect(() => {
+    if (step === 10) {
+      setCustomizingProgress(0);
+      const interval = setInterval(() => {
+        setCustomizingProgress((prev) => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            setTimeout(() => next(), 500);
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 200);
+      return () => clearInterval(interval);
+    }
+  }, [step]);
 
   const submit = async () => {
     if (!user) return;
@@ -60,8 +80,7 @@ export default function Onboarding() {
         starting_weight_kg: form.current_weight_kg,
         goal_weight_kg: form.goal_weight_kg,
         activity_level: activityMap[form.activity_level] || 'inactive',
-        weekly_goal_kg: form.weekly_goal_kg,
-        daily_calorie_goal: parseInt(String(form.daily_calorie_goal)),
+        daily_calorie_goal: calculateCalories(form.weekly_goal_kg),
         daily_steps_goal: parseInt(String(form.daily_steps_goal)),
         daily_water_goal_ml: parseInt(String(form.daily_water_goal_ml)),
         add_burned_calories: form.add_burned_calories,
@@ -80,6 +99,46 @@ export default function Onboarding() {
     }
   };
 
+  // BMI calculation helper
+  const calculateBMI = (weight: number, height: number) => {
+    const heightInMeters = height / 100;
+    return weight / (heightInMeters * heightInMeters);
+  };
+
+  const getHealthyWeightRange = (height: number) => {
+    const heightInMeters = height / 100;
+    const minHealthyBMI = 18.5;
+    const maxHealthyBMI = 24.9;
+    return {
+      min: Math.round(minHealthyBMI * heightInMeters * heightInMeters),
+      max: Math.round(maxHealthyBMI * heightInMeters * heightInMeters),
+    };
+  };
+
+  const targetWeightBMI = calculateBMI(form.goal_weight_kg, form.height_cm);
+  const isTargetHealthy = targetWeightBMI >= 18.5 && targetWeightBMI <= 24.9;
+  const healthyRange = getHealthyWeightRange(form.height_cm);
+
+  const calculateWeeklyGoal = (sliderValue: number) => {
+    // 0-33% = 0.5kg, 34-66% = 0.8kg, 67-100% = 1kg
+    if (sliderValue <= 33) return 0.5;
+    if (sliderValue <= 66) return 0.8;
+    return 1;
+  };
+
+  const calculateCalories = (weeklyGoal: number) => {
+    // Basic calorie calculation based on weekly goal
+    const baseCalories = 2000;
+    const deficit = weeklyGoal * 7700 / 7; // 7700 calories per kg
+    return Math.round(baseCalories - deficit);
+  };
+
+  const calculateTimeToGoal = () => {
+    const totalWeightLoss = form.current_weight_kg - form.goal_weight_kg;
+    const weeks = Math.ceil(totalWeightLoss / form.weekly_goal_kg);
+    return weeks;
+  };
+
   const canContinue = () => {
     switch (step) {
       case 1:
@@ -93,6 +152,8 @@ export default function Onboarding() {
       case 6:
         return form.current_weight_kg > 0;
       case 7:
+        return form.goal_weight_kg > 0 && form.goal_weight_kg < form.current_weight_kg;
+      case 12:
         return !!form.activity_level;
       default:
         return true;
@@ -516,8 +577,441 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 7: Activity Level */}
+            {/* Step 7: Target Weight */}
             {step === 7 && (
+              <div className='space-y-8'>
+                <div className='text-center'>
+                  <h2 className='text-3xl font-bold mb-2'>
+                    What's your target weight?
+                  </h2>
+                  <p className='text-muted-foreground'>
+                    Let's set a goal you can achieve
+                  </p>
+                </div>
+
+                <div className='flex flex-col items-center justify-center py-8'>
+                  <div className='relative w-full h-48 flex items-center justify-center mb-8'>
+                    <div className='text-7xl font-bold'>
+                      {form.goal_weight_kg.toFixed(1)}
+                      <span className='text-3xl text-muted-foreground ml-2'>
+                        kg
+                      </span>
+                    </div>
+                    <div className='absolute top-0 right-8 text-4xl text-muted-foreground'>
+                      {form.current_weight_kg}
+                    </div>
+                  </div>
+
+                  {/* Visual slider representation */}
+                  <div className='w-full max-w-xs mb-4 relative h-12'>
+                    <div className='absolute inset-x-0 flex justify-between text-xs text-muted-foreground'>
+                      {Array.from({ length: 11 }, (_, i) => {
+                        const weight = Math.round(
+                          form.current_weight_kg - 10 + i
+                        );
+                        return (
+                          <div key={i} className='flex flex-col items-center'>
+                            <div
+                              className={`h-2 w-px bg-border ${
+                                i === 0 || i === 10 ? 'h-4' : ''
+                              }`}
+                            />
+                            {(i === 0 || i === 5 || i === 10) && (
+                              <span className='mt-1'>{weight}</span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div
+                      className='absolute top-0 h-12 bg-primary/20 rounded-l'
+                      style={{
+                        left: 0,
+                        right: `${
+                          ((form.current_weight_kg - form.goal_weight_kg) /
+                            20) *
+                          100
+                        }%`,
+                      }}
+                    />
+                    <div
+                      className='absolute top-1/2 -translate-y-1/2 w-1 h-16 bg-primary rounded-full'
+                      style={{
+                        left: `${
+                          ((form.goal_weight_kg -
+                            (form.current_weight_kg - 10)) /
+                            20) *
+                          100
+                        }%`,
+                      }}
+                    />
+                  </div>
+
+                  <input
+                    type='range'
+                    min={form.current_weight_kg - 50}
+                    max={form.current_weight_kg}
+                    step='0.1'
+                    value={form.goal_weight_kg}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        goal_weight_kg: parseFloat(e.target.value),
+                      })
+                    }
+                    className='w-full max-w-xs'
+                  />
+                </div>
+
+                {/* BMI Feedback */}
+                <div
+                  className={`p-4 rounded-2xl flex gap-3 ${
+                    isTargetHealthy
+                      ? 'bg-green-500/10 border border-green-500/20'
+                      : 'bg-orange-500/10 border border-orange-500/20'
+                  }`}
+                >
+                  <div
+                    className={`w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center ${
+                      isTargetHealthy ? 'bg-green-500' : 'bg-orange-500'
+                    }`}
+                  >
+                    {isTargetHealthy ? (
+                      <Check className='w-4 h-4 text-white' />
+                    ) : (
+                      <span className='text-white text-sm font-bold'>!</span>
+                    )}
+                  </div>
+                  <div className='flex-1'>
+                    <h3
+                      className={`font-semibold mb-1 ${
+                        isTargetHealthy ? 'text-green-600' : 'text-orange-600'
+                      }`}
+                    >
+                      {isTargetHealthy
+                        ? `A healthy target is about ${Math.round(
+                            (healthyRange.min + healthyRange.max) / 2
+                          )} kg`
+                        : 'Outside healthy range'}
+                    </h3>
+                    <p className='text-sm text-muted-foreground'>
+                      {isTargetHealthy
+                        ? 'This puts you in a healthy BMI range. It can boost your energy and lower health risks'
+                        : 'Adjusting your weight to be within the healthy range could be supportive for your health and energy levels.'}
+                    </p>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={next}
+                  disabled={!canContinue()}
+                  className='w-full h-14 text-lg'
+                >
+                  Continue
+                </Button>
+              </div>
+            )}
+
+            {/* Step 8: Weekly Pace */}
+            {step === 8 && (
+              <div className='space-y-8'>
+                <div className='text-center'>
+                  <h2 className='text-3xl font-bold mb-2'>
+                    Pick a pace that works for you
+                  </h2>
+                </div>
+
+                <div className='flex flex-col items-center justify-center py-8'>
+                  <p className='text-muted-foreground mb-4'>
+                    Expected progress per week
+                  </p>
+
+                  <div className='text-7xl font-bold mb-8'>
+                    {form.weekly_goal_kg.toFixed(1)}
+                    <span className='text-3xl text-muted-foreground ml-2'>
+                      kg
+                    </span>
+                  </div>
+
+                  <div className='w-full max-w-xs relative mb-8'>
+                    <input
+                      type='range'
+                      min='0'
+                      max='100'
+                      value={
+                        form.weekly_goal_kg === 0.5
+                          ? 16
+                          : form.weekly_goal_kg === 0.8
+                          ? 50
+                          : 84
+                      }
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        setForm({
+                          ...form,
+                          weekly_goal_kg: calculateWeeklyGoal(val),
+                        });
+                      }}
+                      className='w-full'
+                    />
+                    <div className='flex justify-between text-xs text-muted-foreground mt-2'>
+                      <span>Easy</span>
+                      <span>Balanced</span>
+                      <span>Strict</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='p-4 rounded-2xl bg-green-500/10 border border-green-500/20 flex gap-3'>
+                  <Check className='w-6 h-6 text-green-500 flex-shrink-0' />
+                  <div className='flex-1'>
+                    <h3 className='font-semibold text-green-600 mb-1'>
+                      Reach your goal by{' '}
+                      {new Date(
+                        Date.now() + calculateTimeToGoal() * 7 * 24 * 60 * 60 * 1000
+                      ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })}
+                    </h3>
+                    <p className='text-sm text-muted-foreground'>
+                      Daily calorie goal – {calculateCalories(form.weekly_goal_kg)}{' '}
+                      kcal. It's balanced, sustainable, and supports your long term
+                      success goals.
+                    </p>
+                  </div>
+                </div>
+
+                <Button onClick={next} className='w-full h-14 text-lg'>
+                  Continue
+                </Button>
+              </div>
+            )}
+
+            {/* Step 9: Program Steps */}
+            {step === 9 && (
+              <div className='space-y-8'>
+                <div className='text-center'>
+                  <h2 className='text-3xl font-bold mb-2'>
+                    Pick your program steps
+                  </h2>
+                  <p className='text-muted-foreground'>
+                    Each one will support your goal in different ways!
+                  </p>
+                </div>
+
+                <div className='space-y-3'>
+                  {[
+                    {
+                      emoji: '📖',
+                      label: 'Log your meals',
+                      desc: 'Create long-term healthy habits',
+                    },
+                    {
+                      emoji: '👨‍⚕️',
+                      label: 'Work with a nutritionist',
+                      desc: 'Learn to make better eating decisions',
+                    },
+                    {
+                      emoji: '🥘',
+                      label: 'Cook healthy meals',
+                      desc: 'Adds variety of recipes you can pick from',
+                    },
+                    {
+                      emoji: '🏃',
+                      label: 'Move more during the day',
+                      desc: 'Boosts energy and gives you more flexibility with your calories',
+                    },
+                  ].map((item) => (
+                    <button
+                      key={item.label}
+                      onClick={() => {
+                        const steps = form.program_steps.includes(item.label)
+                          ? form.program_steps.filter((s) => s !== item.label)
+                          : [...form.program_steps, item.label];
+                        setForm({ ...form, program_steps: steps });
+                      }}
+                      className={`w-full p-4 rounded-2xl border-2 flex items-start gap-4 transition-all ${
+                        form.program_steps.includes(item.label)
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border bg-card hover:border-primary/50'
+                      }`}
+                    >
+                      <span className='text-2xl'>{item.emoji}</span>
+                      <div className='flex-1 text-left'>
+                        <div className='text-lg font-medium'>{item.label}</div>
+                        <div className='text-sm text-muted-foreground'>
+                          {item.desc}
+                        </div>
+                      </div>
+                      <div
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                          form.program_steps.includes(item.label)
+                            ? 'border-primary'
+                            : 'border-border'
+                        }`}
+                      >
+                        {form.program_steps.includes(item.label) && (
+                          <div className='w-3 h-3 rounded-full bg-primary' />
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={next}
+                  disabled={form.program_steps.length === 0}
+                  className='w-full h-14 text-lg'
+                >
+                  Continue
+                </Button>
+              </div>
+            )}
+
+            {/* Step 10: Customizing */}
+            {step === 10 && (
+              <div className='space-y-8'>
+                <h2 className='text-3xl font-bold text-center'>
+                  Customizing your program
+                </h2>
+
+                <div className='space-y-6 py-8'>
+                  {[
+                    {
+                      label: 'Analyzing profile',
+                      detail: `${form.height_cm} cm, ${form.current_weight_kg} kg`,
+                    },
+                    {
+                      label: 'Metabolism Insights',
+                      detail: `${calculateCalories(form.weekly_goal_kg)} kcal`,
+                    },
+                    {
+                      label: 'Generating meal plan',
+                      detail: 'Balanced',
+                    },
+                    {
+                      label: 'Health condition',
+                      detail:
+                        form.health_conditions.length > 0
+                          ? 'Taken into account'
+                          : 'None',
+                    },
+                  ].map((item, idx) => (
+                    <div key={item.label} className='space-y-2'>
+                      <div className='flex justify-between items-center'>
+                        <span className='text-muted-foreground'>{item.label}:</span>
+                        <div className='flex items-center gap-2'>
+                          <span className='font-semibold'>{item.detail}</span>
+                          {customizingProgress > idx * 25 && (
+                            <Check className='w-5 h-5 text-primary' />
+                          )}
+                        </div>
+                      </div>
+                      <div className='h-2 bg-muted rounded-full overflow-hidden'>
+                        <div
+                          className='h-full bg-primary transition-all duration-300'
+                          style={{
+                            width: `${Math.min(
+                              100,
+                              Math.max(0, (customizingProgress - idx * 25) * 4)
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Step 11: Timeline */}
+            {step === 11 && (
+              <div className='space-y-8'>
+                <h2 className='text-3xl font-bold text-center'>
+                  See what's ahead
+                </h2>
+
+                <div className='space-y-6 py-4'>
+                  {[
+                    {
+                      icon: '●',
+                      title: `Today – ${new Date().toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })} – ${form.current_weight_kg} kg`,
+                      desc: `You want to lose ${(
+                        form.current_weight_kg - form.goal_weight_kg
+                      ).toFixed(0)} kg`,
+                      color: 'text-primary',
+                    },
+                    {
+                      icon: '●',
+                      title: `In 1 week – ${new Date(
+                        Date.now() + 7 * 24 * 60 * 60 * 1000
+                      ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })} – ${(
+                        form.current_weight_kg - form.weekly_goal_kg
+                      ).toFixed(0)} kg`,
+                      desc: "You'll see your first results — around 1 kg down. This is the first win that comes from fixing habits and building a healthier relationship with food",
+                      color: 'text-primary',
+                    },
+                    {
+                      icon: '🎯',
+                      title: `In ${Math.ceil(
+                        (form.current_weight_kg - form.goal_weight_kg) /
+                          form.weekly_goal_kg /
+                          4
+                      )} months – ${new Date(
+                        Date.now() +
+                          calculateTimeToGoal() * 7 * 24 * 60 * 60 * 1000
+                      ).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })} – ${form.goal_weight_kg} kg`,
+                      desc: `You'll reach your goal of losing ${(
+                        form.current_weight_kg - form.goal_weight_kg
+                      ).toFixed(0)} kg. You'll feel better, more energetic, and proud of how far you've come.`,
+                      color: 'text-primary',
+                    },
+                  ].map((milestone, idx) => (
+                    <div key={idx} className='flex gap-4'>
+                      <div className='flex flex-col items-center'>
+                        <div
+                          className={`text-2xl ${milestone.color} flex-shrink-0`}
+                        >
+                          {milestone.icon}
+                        </div>
+                        {idx < 2 && (
+                          <div className='w-0.5 h-full bg-border mt-2' />
+                        )}
+                      </div>
+                      <div className='flex-1 pb-6'>
+                        <h3 className='font-semibold mb-2'>
+                          {milestone.title}
+                        </h3>
+                        <p className='text-sm text-muted-foreground'>
+                          {milestone.desc}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <Button onClick={next} className='w-full h-14 text-lg'>
+                  Continue
+                </Button>
+              </div>
+            )}
+
+            {/* Step 12: Activity Level */}
+            {step === 12 && (
               <div className='space-y-8'>
                 <div className='text-center'>
                   <h2 className='text-3xl font-bold mb-2'>
@@ -594,8 +1088,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 8: Health Conditions */}
-            {step === 8 && (
+            {/* Step 13: Health Conditions */}
+            {step === 13 && (
               <div className='space-y-8'>
                 <div className='text-center'>
                   <h2 className='text-3xl font-bold mb-2'>
@@ -657,8 +1151,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 9: Disclaimer */}
-            {step === 9 && (
+            {/* Step 14: Disclaimer */}
+            {step === 14 && (
               <div className='space-y-8 text-center'>
                 <Heart
                   className='w-24 h-24 mx-auto text-primary'
