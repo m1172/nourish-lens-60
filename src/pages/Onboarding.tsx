@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { ArrowLeft, ThumbsUp, Heart, Target, Check } from 'lucide-react';
+import { Picker, RulerPicker } from '@/components/ui/picker';
 
 export default function Onboarding() {
   const { user } = useAuth();
@@ -438,42 +439,13 @@ export default function Onboarding() {
                   </p>
                 </div>
 
-                <div className='flex flex-col items-center justify-center py-12'>
-                  <div className='relative mb-12'>
-                    <div className='w-64 h-64 rounded-full bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 flex items-center justify-center border-4 border-primary/20 shadow-2xl'>
-                      <div className='text-center'>
-                        <div className='text-8xl font-bold bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent transition-all duration-300'>
-                          {form.age}
-                        </div>
-                        <div className='text-xl text-muted-foreground font-medium mt-2'>
-                          years old
-                        </div>
-                      </div>
-                    </div>
-                    <div className='absolute -bottom-2 left-1/2 -translate-x-1/2 w-48 h-8 bg-black/5 rounded-full blur-xl' />
-                  </div>
-
-                  <div className='w-full max-w-sm space-y-4'>
-                    <div className='relative'>
-                      <input
-                        type='range'
-                        min='18'
-                        max='100'
-                        value={form.age}
-                        onChange={(e) =>
-                          setForm({ ...form, age: parseInt(e.target.value) })
-                        }
-                        className='w-full h-3 bg-secondary rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-br [&::-webkit-slider-thumb]:from-primary [&::-webkit-slider-thumb]:to-accent [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-background [&::-moz-range-thumb]:w-8 [&::-moz-range-thumb]:h-8 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-gradient-to-br [&::-moz-range-thumb]:from-primary [&::-moz-range-thumb]:to-accent [&::-moz-range-thumb]:shadow-lg [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-background [&::-moz-range-thumb]:border-0'
-                        style={{
-                          background: `linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--primary)) ${((form.age - 18) / (100 - 18)) * 100}%, hsl(var(--secondary)) ${((form.age - 18) / (100 - 18)) * 100}%, hsl(var(--secondary)) 100%)`
-                        }}
-                      />
-                    </div>
-                    <div className='flex justify-between text-sm text-muted-foreground px-1'>
-                      <span>18</span>
-                      <span>100</span>
-                    </div>
-                  </div>
+                <div className='flex flex-col items-center justify-center py-8'>
+                  <Picker
+                    value={form.age}
+                    onChange={(age) => setForm({ ...form, age })}
+                    min={18}
+                    max={100}
+                  />
                 </div>
 
                 <Button onClick={next} className='w-full h-14 text-lg'>
@@ -494,7 +466,7 @@ export default function Onboarding() {
                   </p>
                 </div>
 
-                <div className='flex flex-col items-center justify-center py-12'>
+                <div className='flex flex-col items-center justify-center py-8'>
                   <div className='flex gap-2 mb-8'>
                     <button className='px-6 py-2 rounded-full bg-primary text-primary-foreground font-medium shadow-lg shadow-primary/30 transition-all'>
                       cm
@@ -504,41 +476,13 @@ export default function Onboarding() {
                     </button>
                   </div>
 
-                  <div className='relative mb-12'>
-                    <div className='bg-gradient-to-b from-primary/5 via-accent/5 to-primary/5 px-16 py-12 rounded-3xl border-2 border-primary/10 shadow-xl'>
-                      <div className='text-center'>
-                        <div className='text-8xl font-bold bg-gradient-to-br from-primary via-accent to-primary bg-clip-text text-transparent transition-all duration-300'>
-                          {form.height_cm}
-                        </div>
-                        <div className='text-2xl text-muted-foreground font-medium mt-2'>
-                          centimeters
-                        </div>
-                      </div>
-                    </div>
-                    <div className='absolute -bottom-4 left-1/2 -translate-x-1/2 w-64 h-8 bg-primary/10 rounded-full blur-2xl' />
-                  </div>
-
-                  <div className='w-full max-w-sm space-y-4'>
-                    <div className='relative'>
-                      <input
-                        type='range'
-                        min='140'
-                        max='220'
-                        value={form.height_cm}
-                        onChange={(e) =>
-                          setForm({ ...form, height_cm: parseInt(e.target.value) })
-                        }
-                        className='w-full h-3 bg-secondary rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-br [&::-webkit-slider-thumb]:from-primary [&::-webkit-slider-thumb]:to-accent [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-background [&::-moz-range-thumb]:w-8 [&::-moz-range-thumb]:h-8 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-gradient-to-br [&::-moz-range-thumb]:from-primary [&::-moz-range-thumb]:to-accent [&::-moz-range-thumb]:shadow-lg [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-background [&::-moz-range-thumb]:border-0'
-                        style={{
-                          background: `linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--primary)) ${((form.height_cm - 140) / (220 - 140)) * 100}%, hsl(var(--secondary)) ${((form.height_cm - 140) / (220 - 140)) * 100}%, hsl(var(--secondary)) 100%)`
-                        }}
-                      />
-                    </div>
-                    <div className='flex justify-between text-sm text-muted-foreground px-1'>
-                      <span>140 cm</span>
-                      <span>220 cm</span>
-                    </div>
-                  </div>
+                  <Picker
+                    value={form.height_cm}
+                    onChange={(height_cm) => setForm({ ...form, height_cm })}
+                    min={140}
+                    max={220}
+                    unit="cm"
+                  />
                 </div>
 
                 <Button onClick={next} className='w-full h-14 text-lg'>
@@ -558,7 +502,7 @@ export default function Onboarding() {
                   </p>
                 </div>
 
-                <div className='flex flex-col items-center justify-center py-12'>
+                <div className='flex flex-col items-center justify-center py-8'>
                   <div className='flex gap-2 mb-8'>
                     <button className='px-6 py-2 rounded-full bg-primary text-primary-foreground font-medium shadow-lg shadow-primary/30 transition-all'>
                       kg
@@ -568,50 +512,20 @@ export default function Onboarding() {
                     </button>
                   </div>
 
-                  <div className='relative mb-12'>
-                    <div className='relative'>
-                      <div className='absolute inset-0 bg-gradient-to-br from-primary/20 via-accent/20 to-primary/20 rounded-3xl blur-xl' />
-                      <div className='relative bg-card px-20 py-14 rounded-3xl border-2 border-primary/20 shadow-2xl'>
-                        <div className='text-center'>
-                          <div className='text-9xl font-bold bg-gradient-to-br from-primary via-accent to-primary bg-clip-text text-transparent transition-all duration-300'>
-                            {form.current_weight_kg}
-                          </div>
-                          <div className='text-2xl text-muted-foreground font-medium mt-2'>
-                            kilograms
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className='w-full max-w-sm space-y-4'>
-                    <div className='relative'>
-                      <input
-                        type='range'
-                        min='40'
-                        max='200'
-                        value={form.current_weight_kg}
-                        onChange={(e) =>
-                          setForm({
-                            ...form,
-                            current_weight_kg: parseFloat(e.target.value),
-                            goal_weight_kg: Math.min(
-                              form.goal_weight_kg,
-                              parseFloat(e.target.value)
-                            ),
-                          })
-                        }
-                        className='w-full h-3 bg-secondary rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-8 [&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-gradient-to-br [&::-webkit-slider-thumb]:from-primary [&::-webkit-slider-thumb]:to-accent [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-background [&::-moz-range-thumb]:w-8 [&::-moz-range-thumb]:h-8 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-gradient-to-br [&::-moz-range-thumb]:from-primary [&::-moz-range-thumb]:to-accent [&::-moz-range-thumb]:shadow-lg [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-4 [&::-moz-range-thumb]:border-background [&::-moz-range-thumb]:border-0'
-                        style={{
-                          background: `linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--primary)) ${((form.current_weight_kg - 40) / (200 - 40)) * 100}%, hsl(var(--secondary)) ${((form.current_weight_kg - 40) / (200 - 40)) * 100}%, hsl(var(--secondary)) 100%)`
-                        }}
-                      />
-                    </div>
-                    <div className='flex justify-between text-sm text-muted-foreground px-1'>
-                      <span>40 kg</span>
-                      <span>200 kg</span>
-                    </div>
-                  </div>
+                  <RulerPicker
+                    value={form.current_weight_kg}
+                    onChange={(current_weight_kg) => 
+                      setForm({
+                        ...form,
+                        current_weight_kg,
+                        goal_weight_kg: Math.min(form.goal_weight_kg, current_weight_kg),
+                      })
+                    }
+                    min={40}
+                    max={200}
+                    unit="kg"
+                    step={0.1}
+                  />
                 </div>
 
                 <Button onClick={next} className='w-full h-14 text-lg'>
@@ -775,76 +689,22 @@ export default function Onboarding() {
                 </div>
 
                 <div className='flex flex-col items-center justify-center py-8'>
-                  <div className='relative w-full h-48 flex items-center justify-center mb-8'>
-                    <div className='text-7xl font-bold'>
-                      {form.goal_weight_kg.toFixed(1)}
-                      <span className='text-3xl text-muted-foreground ml-2'>
-                        kg
-                      </span>
-                    </div>
-                    <div className='absolute top-0 right-8 text-4xl text-muted-foreground'>
-                      {form.current_weight_kg}
+                  <div className='mb-4 text-right w-full flex justify-end px-8'>
+                    <div className='text-sm text-muted-foreground flex items-center gap-2'>
+                      <span>Current: </span>
+                      <span className='text-xl font-bold text-primary'>{form.current_weight_kg} kg</span>
                     </div>
                   </div>
 
-                  {/* Visual slider representation */}
-                  <div className='w-full max-w-xs mb-4 relative h-12'>
-                    <div className='absolute inset-x-0 flex justify-between text-xs text-muted-foreground'>
-                      {Array.from({ length: 11 }, (_, i) => {
-                        const weight = Math.round(
-                          form.current_weight_kg - 10 + i
-                        );
-                        return (
-                          <div key={i} className='flex flex-col items-center'>
-                            <div
-                              className={`h-2 w-px bg-border ${
-                                i === 0 || i === 10 ? 'h-4' : ''
-                              }`}
-                            />
-                            {(i === 0 || i === 5 || i === 10) && (
-                              <span className='mt-1'>{weight}</span>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                    <div
-                      className='absolute top-0 h-12 bg-primary/20 rounded-l'
-                      style={{
-                        left: 0,
-                        right: `${
-                          ((form.current_weight_kg - form.goal_weight_kg) /
-                            20) *
-                          100
-                        }%`,
-                      }}
-                    />
-                    <div
-                      className='absolute top-1/2 -translate-y-1/2 w-1 h-16 bg-primary rounded-full'
-                      style={{
-                        left: `${
-                          ((form.goal_weight_kg -
-                            (form.current_weight_kg - 10)) /
-                            20) *
-                          100
-                        }%`,
-                      }}
-                    />
-                  </div>
-
-                  <input
-                    type='range'
-                    min={form.current_weight_kg - 50}
-                    max={form.current_weight_kg}
-                    step='0.1'
+                  <RulerPicker
                     value={form.goal_weight_kg}
-                    onChange={(e) =>
-                      setForm({
-                        ...form,
-                        goal_weight_kg: parseFloat(e.target.value),
-                      })
+                    onChange={(goal_weight_kg) => 
+                      setForm({ ...form, goal_weight_kg })
                     }
-                    className='w-full max-w-xs'
+                    min={Math.max(40, form.current_weight_kg - 50)}
+                    max={form.current_weight_kg}
+                    unit="kg"
+                    step={0.1}
                   />
                 </div>
 
