@@ -38,7 +38,7 @@ export default function Onboarding() {
 
   // Simulate customizing progress
   useEffect(() => {
-    if (step === 10) {
+    if (step === 12) {
       setCustomizingProgress(0);
       const interval = setInterval(() => {
         setCustomizingProgress((prev) => {
@@ -62,7 +62,6 @@ export default function Onboarding() {
       const genderMap: Record<string, string> = {
         Male: 'male',
         Female: 'female',
-        Other: 'other',
       };
       const activityMap: Record<string, string> = {
         'Mostly inactive': 'inactive',
@@ -73,7 +72,7 @@ export default function Onboarding() {
 
       const { error } = await supabase.from('profiles').insert({
         id: user.id,
-        gender: genderMap[form.gender] || 'other',
+        gender: genderMap[form.gender],
         age: form.age,
         height_cm: form.height_cm,
         current_weight_kg: form.current_weight_kg,
@@ -99,7 +98,6 @@ export default function Onboarding() {
     }
   };
 
-  // BMI calculation helper
   const calculateBMI = (weight: number, height: number) => {
     const heightInMeters = height / 100;
     return weight / (heightInMeters * heightInMeters);
@@ -129,7 +127,7 @@ export default function Onboarding() {
   const calculateCalories = (weeklyGoal: number) => {
     // Basic calorie calculation based on weekly goal
     const baseCalories = 2000;
-    const deficit = weeklyGoal * 7700 / 7; // 7700 calories per kg
+    const deficit = (weeklyGoal * 7700) / 7; // 7700 calories per kg
     return Math.round(baseCalories - deficit);
   };
 
@@ -150,11 +148,14 @@ export default function Onboarding() {
       case 5:
         return form.height_cm > 0;
       case 6:
-        return form.current_weight_kg > 0;
-      case 7:
-        return form.goal_weight_kg > 0 && form.goal_weight_kg < form.current_weight_kg;
-      case 12:
         return !!form.activity_level;
+      case 8:
+        return form.current_weight_kg > 0;
+      case 9:
+        return (
+          form.goal_weight_kg > 0 &&
+          form.goal_weight_kg < form.current_weight_kg
+        );
       default:
         return true;
     }
@@ -375,7 +376,6 @@ export default function Onboarding() {
                   {[
                     { emoji: '🤵', label: 'Male' },
                     { emoji: '👩', label: 'Female' },
-                    { emoji: '🧑', label: 'Other' },
                   ].map((gender) => (
                     <button
                       key={gender.label}
@@ -521,7 +521,6 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 6: Weight */}
             {step === 6 && (
               <div className='space-y-8'>
                 <div className='text-center'>
@@ -577,8 +576,150 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 7: Target Weight */}
             {step === 7 && (
+              <div className='space-y-8'>
+                <div className='text-center'>
+                  <h2 className='text-3xl font-bold mb-2'>
+                    What's your activity level?
+                  </h2>
+                  <p className='text-muted-foreground'>
+                    This helps us calculate your daily needs
+                  </p>
+                </div>
+
+                <div className='space-y-3'>
+                  {[
+                    {
+                      emoji: '🧘',
+                      label: 'Mostly inactive',
+                      desc: 'I have a desk job',
+                    },
+                    {
+                      emoji: '🚶',
+                      label: 'Lightly active',
+                      desc: 'I move a bit during the day',
+                    },
+                    {
+                      emoji: '🏃',
+                      label: 'Active',
+                      desc: 'I include workouts',
+                    },
+                    {
+                      emoji: '🏋️',
+                      label: 'Very active',
+                      desc: 'I am active most of the day',
+                    },
+                  ].map((level) => (
+                    <button
+                      key={level.label}
+                      onClick={() =>
+                        setForm({ ...form, activity_level: level.label })
+                      }
+                      className={`w-full p-4 rounded-2xl border-2 flex items-start gap-4 transition-all ${
+                        form.activity_level === level.label
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border bg-card hover:border-primary/50'
+                      }`}
+                    >
+                      <span className='text-2xl'>{level.emoji}</span>
+                      <div className='flex-1 text-left'>
+                        <div className='text-lg font-medium'>{level.label}</div>
+                        <div className='text-sm text-muted-foreground'>
+                          {level.desc}
+                        </div>
+                      </div>
+                      <div
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                          form.activity_level === level.label
+                            ? 'border-primary'
+                            : 'border-border'
+                        }`}
+                      >
+                        {form.activity_level === level.label && (
+                          <div className='w-3 h-3 rounded-full bg-primary' />
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={next}
+                  disabled={!canContinue()}
+                  className='w-full h-14 text-lg'
+                >
+                  Continue
+                </Button>
+              </div>
+            )}
+
+            {/* Step 8: Health Conditions */}
+            {step === 8 && (
+              <div className='space-y-8'>
+                <div className='text-center'>
+                  <h2 className='text-3xl font-bold mb-2'>
+                    What should we take into account?
+                  </h2>
+                  <p className='text-muted-foreground'>
+                    We keep your health needs in mind
+                  </p>
+                </div>
+
+                <div className='space-y-3'>
+                  {[
+                    { emoji: '🤢', label: 'Gastric Disease' },
+                    { emoji: '🩸', label: 'High Cholesterol' },
+                    { emoji: '🦋', label: 'Thyroid Disease' },
+                    { emoji: '💉', label: 'Diabetes' },
+                    { emoji: '💊', label: 'GLP-1 Therapy' },
+                  ].map((condition) => (
+                    <button
+                      key={condition.label}
+                      onClick={() => {
+                        const conditions = form.health_conditions.includes(
+                          condition.label
+                        )
+                          ? form.health_conditions.filter(
+                              (c) => c !== condition.label
+                            )
+                          : [...form.health_conditions, condition.label];
+                        setForm({ ...form, health_conditions: conditions });
+                      }}
+                      className={`w-full p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${
+                        form.health_conditions.includes(condition.label)
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border bg-card hover:border-primary/50'
+                      }`}
+                    >
+                      <span className='text-2xl'>{condition.emoji}</span>
+                      <span className='text-lg font-medium'>
+                        {condition.label}
+                      </span>
+                      <div
+                        className={`ml-auto w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                          form.health_conditions.includes(condition.label)
+                            ? 'border-primary'
+                            : 'border-border'
+                        }`}
+                      >
+                        {form.health_conditions.includes(condition.label) && (
+                          <div className='w-3 h-3 rounded-full bg-primary' />
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                <Button onClick={next} className='w-full h-14 text-lg'>
+                  No health conditions
+                </Button>
+              </div>
+            )}
+
+            {/* Step 8: Weight */}
+
+            {/* Step 9: Target Weight */}
+            {step === 9 && (
               <div className='space-y-8'>
                 <div className='text-center'>
                   <h2 className='text-3xl font-bold mb-2'>
@@ -712,8 +853,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 8: Weekly Pace */}
-            {step === 8 && (
+            {/* Step 10: Weekly Pace */}
+            {step === 10 && (
               <div className='space-y-8'>
                 <div className='text-center'>
                   <h2 className='text-3xl font-bold mb-2'>
@@ -768,7 +909,8 @@ export default function Onboarding() {
                     <h3 className='font-semibold text-green-600 mb-1'>
                       Reach your goal by{' '}
                       {new Date(
-                        Date.now() + calculateTimeToGoal() * 7 * 24 * 60 * 60 * 1000
+                        Date.now() +
+                          calculateTimeToGoal() * 7 * 24 * 60 * 60 * 1000
                       ).toLocaleDateString('en-US', {
                         day: 'numeric',
                         month: 'long',
@@ -776,9 +918,10 @@ export default function Onboarding() {
                       })}
                     </h3>
                     <p className='text-sm text-muted-foreground'>
-                      Daily calorie goal – {calculateCalories(form.weekly_goal_kg)}{' '}
-                      kcal. It's balanced, sustainable, and supports your long term
-                      success goals.
+                      Daily calorie goal –{' '}
+                      {calculateCalories(form.weekly_goal_kg)} kcal. It's
+                      balanced, sustainable, and supports your long term success
+                      goals.
                     </p>
                   </div>
                 </div>
@@ -789,8 +932,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 9: Program Steps */}
-            {step === 9 && (
+            {/* Step 11: Program Steps */}
+            {step === 11 && (
               <div className='space-y-8'>
                 <div className='text-center'>
                   <h2 className='text-3xl font-bold mb-2'>
@@ -870,8 +1013,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 10: Customizing */}
-            {step === 10 && (
+            {/* Step 12: Customizing */}
+            {step === 12 && (
               <div className='space-y-8'>
                 <h2 className='text-3xl font-bold text-center'>
                   Customizing your program
@@ -901,7 +1044,9 @@ export default function Onboarding() {
                   ].map((item, idx) => (
                     <div key={item.label} className='space-y-2'>
                       <div className='flex justify-between items-center'>
-                        <span className='text-muted-foreground'>{item.label}:</span>
+                        <span className='text-muted-foreground'>
+                          {item.label}:
+                        </span>
                         <div className='flex items-center gap-2'>
                           <span className='font-semibold'>{item.detail}</span>
                           {customizingProgress > idx * 25 && (
@@ -926,8 +1071,8 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 11: Timeline */}
-            {step === 11 && (
+            {/* Step 13: Timeline */}
+            {step === 13 && (
               <div className='space-y-8'>
                 <h2 className='text-3xl font-bold text-center'>
                   See what's ahead
@@ -977,7 +1122,9 @@ export default function Onboarding() {
                       })} – ${form.goal_weight_kg} kg`,
                       desc: `You'll reach your goal of losing ${(
                         form.current_weight_kg - form.goal_weight_kg
-                      ).toFixed(0)} kg. You'll feel better, more energetic, and proud of how far you've come.`,
+                      ).toFixed(
+                        0
+                      )} kg. You'll feel better, more energetic, and proud of how far you've come.`,
                       color: 'text-primary',
                     },
                   ].map((milestone, idx) => (
@@ -1006,147 +1153,6 @@ export default function Onboarding() {
 
                 <Button onClick={next} className='w-full h-14 text-lg'>
                   Continue
-                </Button>
-              </div>
-            )}
-
-            {/* Step 12: Activity Level */}
-            {step === 12 && (
-              <div className='space-y-8'>
-                <div className='text-center'>
-                  <h2 className='text-3xl font-bold mb-2'>
-                    What's your activity level?
-                  </h2>
-                  <p className='text-muted-foreground'>
-                    This helps us calculate your daily needs
-                  </p>
-                </div>
-
-                <div className='space-y-3'>
-                  {[
-                    {
-                      emoji: '🧘',
-                      label: 'Mostly inactive',
-                      desc: 'I have a desk job',
-                    },
-                    {
-                      emoji: '🚶',
-                      label: 'Lightly active',
-                      desc: 'I move a bit during the day',
-                    },
-                    {
-                      emoji: '🏃',
-                      label: 'Active',
-                      desc: 'I include workouts',
-                    },
-                    {
-                      emoji: '🏋️',
-                      label: 'Very active',
-                      desc: 'I am active most of the day',
-                    },
-                  ].map((level) => (
-                    <button
-                      key={level.label}
-                      onClick={() =>
-                        setForm({ ...form, activity_level: level.label })
-                      }
-                      className={`w-full p-4 rounded-2xl border-2 flex items-start gap-4 transition-all ${
-                        form.activity_level === level.label
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border bg-card hover:border-primary/50'
-                      }`}
-                    >
-                      <span className='text-2xl'>{level.emoji}</span>
-                      <div className='flex-1 text-left'>
-                        <div className='text-lg font-medium'>{level.label}</div>
-                        <div className='text-sm text-muted-foreground'>
-                          {level.desc}
-                        </div>
-                      </div>
-                      <div
-                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                          form.activity_level === level.label
-                            ? 'border-primary'
-                            : 'border-border'
-                        }`}
-                      >
-                        {form.activity_level === level.label && (
-                          <div className='w-3 h-3 rounded-full bg-primary' />
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-
-                <Button
-                  onClick={next}
-                  disabled={!canContinue()}
-                  className='w-full h-14 text-lg'
-                >
-                  Continue
-                </Button>
-              </div>
-            )}
-
-            {/* Step 13: Health Conditions */}
-            {step === 13 && (
-              <div className='space-y-8'>
-                <div className='text-center'>
-                  <h2 className='text-3xl font-bold mb-2'>
-                    What should we take into account?
-                  </h2>
-                  <p className='text-muted-foreground'>
-                    We keep your health needs in mind
-                  </p>
-                </div>
-
-                <div className='space-y-3'>
-                  {[
-                    { emoji: '🤢', label: 'Gastric Disease' },
-                    { emoji: '🩸', label: 'High Cholesterol' },
-                    { emoji: '🦋', label: 'Thyroid Disease' },
-                    { emoji: '💉', label: 'Diabetes' },
-                    { emoji: '💊', label: 'GLP-1 Therapy' },
-                  ].map((condition) => (
-                    <button
-                      key={condition.label}
-                      onClick={() => {
-                        const conditions = form.health_conditions.includes(
-                          condition.label
-                        )
-                          ? form.health_conditions.filter(
-                              (c) => c !== condition.label
-                            )
-                          : [...form.health_conditions, condition.label];
-                        setForm({ ...form, health_conditions: conditions });
-                      }}
-                      className={`w-full p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${
-                        form.health_conditions.includes(condition.label)
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border bg-card hover:border-primary/50'
-                      }`}
-                    >
-                      <span className='text-2xl'>{condition.emoji}</span>
-                      <span className='text-lg font-medium'>
-                        {condition.label}
-                      </span>
-                      <div
-                        className={`ml-auto w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                          form.health_conditions.includes(condition.label)
-                            ? 'border-primary'
-                            : 'border-border'
-                        }`}
-                      >
-                        {form.health_conditions.includes(condition.label) && (
-                          <div className='w-3 h-3 rounded-full bg-primary' />
-                        )}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-
-                <Button onClick={next} className='w-full h-14 text-lg'>
-                  No health conditions
                 </Button>
               </div>
             )}
