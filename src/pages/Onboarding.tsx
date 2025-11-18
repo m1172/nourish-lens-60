@@ -135,12 +135,13 @@ export default function Onboarding() {
     }
 
     const rawDeficit = (weeklyGoal * 7700) / 7; // 7700 kcal / kg
-    const maxDeficit = tdee * 0.25; // cap at 25% deficit
+    const maxDeficit = Math.min(tdee * 0.25, 1000); // cap at 25% of TDEE or 1000 cal max
     const safeDeficit = Math.min(rawDeficit, maxDeficit);
     const targetCalories = tdee - safeDeficit;
 
-    // Hard floor – don't go too low
-    return Math.max(1200, Math.round(targetCalories));
+    // Gender-specific minimum calories
+    const minCalories = form.gender === 'Female' ? 1200 : 1500;
+    return Math.max(minCalories, Math.round(targetCalories));
   };
 
   const calculateBMR = () => {
@@ -366,11 +367,14 @@ export default function Onboarding() {
                     Continue
                   </Button>
                   <button
-                    onClick={() => navigate('/auth')}
-                    className='text-sm text-muted-foreground'
+                    onClick={() => {
+                      console.log('Navigating to /auth');
+                      navigate('/auth');
+                    }}
+                    className='text-sm text-muted-foreground hover:text-foreground transition-colors'
                   >
                     I already have an account{' '}
-                    <span className='font-semibold text-foreground'>
+                    <span className='font-semibold text-primary underline'>
                       Sign In
                     </span>
                   </button>
