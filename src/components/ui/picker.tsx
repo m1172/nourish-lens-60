@@ -168,7 +168,7 @@ export function RulerPicker({
         />
         {isMainMark && (
           <span className="text-xs text-muted-foreground mt-1 font-medium">
-            {Math.round(markValue)}
+            {markValue.toFixed(decimalPlaces)}
           </span>
         )}
       </div>
