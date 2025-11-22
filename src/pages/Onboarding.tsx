@@ -175,7 +175,7 @@ export default function Onboarding() {
     const baseBmr = calculateBMR();
     const activityFactor = getActivityFactor(form.activity_level);
     const tdee = baseBmr * activityFactor || 2000;
-    const maxDailyDeficit = tdee * 0.25;
+    const maxDailyDeficit = tdee * 0.5;
     const maxWeeklyKg = (maxDailyDeficit * 7) / 7700;
     const baseMax = Math.max(0.1, Math.min(1.5, maxWeeklyKg));
     return Number(baseMax.toFixed(1));
@@ -225,10 +225,7 @@ export default function Onboarding() {
           form.goal_weight_kg > 0 &&
           form.goal_weight_kg < form.current_weight_kg
         );
-      case 10: {
-        const maxWeekly = getSafeWeeklyGoalMax();
-        return form.weekly_goal_kg > 0 && form.weekly_goal_kg <= maxWeekly;
-      }
+
       default:
         return true;
     }
@@ -239,6 +236,7 @@ export default function Onboarding() {
   const healthyRange = getHealthyWeightRange(form.height_cm);
   const maxRecommendedWeeklyLoss = getSafeWeeklyGoalMax();
   const isWeeklyGoalAggressive = form.weekly_goal_kg > maxRecommendedWeeklyLoss;
+  const isWeeklyGoalValid = form.weekly_goal_kg > 0 && !isWeeklyGoalAggressive;
 
   // ---------- Effects ----------
 
@@ -271,7 +269,15 @@ export default function Onboarding() {
   }, [form.current_weight_kg]);
 
   const submit = async () => {
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: 'Sign in required',
+        description: 'Please sign in or create an account to continue.',
+        variant: 'destructive',
+      });
+      navigate('/auth');
+      return;
+    }
 
     setLoading(true);
     try {
@@ -334,7 +340,7 @@ export default function Onboarding() {
       {step > 0 && (
         <button
           onClick={back}
-          className='absolute top-4 left-4 p-2 rounded-full hover:bg-muted transition-colors z-10'
+          className='p-2 mt-2 ml-2 hover:bg-muted transition-colors z-10'
         >
           <ArrowLeft className='w-6 h-6' />
         </button>
@@ -342,7 +348,7 @@ export default function Onboarding() {
 
       {/* Content */}
       <div className='flex-1 overflow-y-auto'>
-        <div className='min-h-full flex items-center justify-center p-6'>
+        <div className='min-h-full flex items-center justify-center p-4'>
           <div className='w-full max-w-lg'>
             {/* Step 0: Welcome */}
             {step === 0 && (
@@ -655,9 +661,6 @@ export default function Onboarding() {
                     <button className='px-6 py-2 rounded-full bg-primary text-primary-foreground font-medium shadow-lg shadow-primary/30 transition-all'>
                       cm
                     </button>
-                    <button className='px-6 py-2 rounded-full bg-secondary text-muted-foreground font-medium hover:bg-secondary/80 transition-all'>
-                      ft
-                    </button>
                   </div>
 
                   <Picker
@@ -770,7 +773,7 @@ export default function Onboarding() {
                       onClick={() =>
                         setForm({ ...form, activity_level: level.label })
                       }
-                      className={`w-full p-4 rounded-2xl border-2 flex items-start gap-4 transition-all ${
+                      className={`w-full p-4 rounded-2xl border-2 flex items-center gap-4 transition-all ${
                         form.activity_level === level.label
                           ? 'border-primary bg-primary/5'
                           : 'border-border bg-card hover:border-primary/50'
@@ -873,7 +876,7 @@ export default function Onboarding() {
 
             {/* Step 9: Target Weight */}
             {step === 9 && (
-              <div className='space-y-8'>
+              <div className='space-y-4'>
                 <div className='text-center'>
                   <h2 className='text-3xl font-bold mb-2'>
                     What's your target weight?
@@ -883,7 +886,7 @@ export default function Onboarding() {
                   </p>
                 </div>
 
-                <div className='flex flex-col items-center justify-center py-8'>
+                <div className='flex flex-col items-center justify-center '>
                   <div className='mb-4 text-right w-full flex justify-end px-8'>
                     <div className='text-sm text-muted-foreground flex items-center gap-2'>
                       <span>Current: </span>
@@ -956,14 +959,14 @@ export default function Onboarding() {
 
             {/* Step 10: Weekly Pace */}
             {step === 10 && (
-              <div className='space-y-8'>
+              <div className='space-y-4'>
                 <div className='text-center'>
                   <h2 className='text-3xl font-bold mb-2'>
                     Pick a pace that works for you
                   </h2>
                 </div>
 
-                <div className='flex flex-col items-center justify-center py-8'>
+                <div className='flex flex-col items-center justify-center'>
                   <p className='text-muted-foreground mb-4'>
                     Expected progress per week
                   </p>
@@ -975,7 +978,7 @@ export default function Onboarding() {
                     </span>
                   </div>
 
-                  <p className='text-xs text-muted-foreground mb-4'>
+                  <p className='text-xs text-muted-foreground mb-2'>
                     Recommended max for you:{' '}
                     {maxRecommendedWeeklyLoss.toFixed(1)} kg/week
                   </p>
@@ -1042,11 +1045,7 @@ export default function Onboarding() {
                   </div>
                 </div>
 
-                <Button
-                  onClick={next}
-                  disabled={canContinue()}
-                  className='w-full h-14 text-lg'
-                >
+                <Button onClick={next} className='w-full h-14 text-lg'>
                   Continue
                 </Button>
               </div>

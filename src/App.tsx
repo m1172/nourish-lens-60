@@ -34,7 +34,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }
 
   if (!user) {
-    return <Navigate to='/auth' replace />;
+    return <Navigate to='/onboarding' replace />;
   }
 
   return <>{children}</>;
@@ -77,11 +77,9 @@ const App = () => (
             <Route
               path='/onboarding'
               element={
-                <ProtectedRoute>
-                  <OnboardingRoute>
-                    <Onboarding />
-                  </OnboardingRoute>
-                </ProtectedRoute>
+                <OnboardingRoute>
+                  <Onboarding />
+                </OnboardingRoute>
               }
             />
             <Route
@@ -158,10 +156,7 @@ const App = () => (
             />
             <Route path='*' element={<NotFound />} />
           </Routes>
-          {/* Modal renderer: show onboarding as a modal when ?onboarding=1 is present */}
-          <OnboardingModal />
-          {/* Render BottomNav once for authenticated users */}
-          {/* AuthenticatedBottomNav - renders BottomNav only when user is signed in */}
+
           <AuthBottomNavWrapper />
         </AuthProvider>
       </BrowserRouter>

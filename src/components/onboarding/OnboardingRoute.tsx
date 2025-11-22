@@ -9,7 +9,10 @@ export function OnboardingRoute({ children }: { children: ReactNode }) {
   const [hasProfile, setHasProfile] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setProfileLoading(false);
+      return;
+    }
 
     const checkProfile = async () => {
       const { data } = await supabase
@@ -33,9 +36,11 @@ export function OnboardingRoute({ children }: { children: ReactNode }) {
     );
   }
 
-  if (hasProfile) {
+  // If user is authenticated and has a profile, redirect to home
+  if (user && hasProfile) {
     return <Navigate to='/' replace />;
   }
 
+  // Allow onboarding for both authenticated (no profile) and unauthenticated users
   return <>{children}</>;
 }
