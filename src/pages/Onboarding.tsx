@@ -31,7 +31,9 @@ export default function Onboarding() {
     program_steps: [] as string[],
   });
 
-  const totalSteps = 15;
+  const [progressCheckDay, setProgressCheckDay] = useState(7);
+
+  const totalSteps = 19; // Updated to include new steps
   const progress = ((step + 1) / totalSteps) * 100;
 
   const next = () => setStep((s) => Math.min(totalSteps - 1, s + 1));
@@ -1246,8 +1248,306 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* Step 14: Disclaimer */}
+            {/* Step 14: Health Permission */}
             {step === 14 && (
+              <div className='space-y-8 text-center'>
+                <div className='space-y-6'>
+                  {/* App Icon */}
+                  <div className='flex justify-center mb-8'>
+                    <div className='w-24 h-24 rounded-3xl bg-gradient-to-br from-primary to-pink-500 flex items-center justify-center shadow-lg'>
+                      <Heart className='w-12 h-12 text-white' fill='white' />
+                    </div>
+                  </div>
+
+                  {/* Icons Row */}
+                  <div className='flex justify-center gap-8 mb-6'>
+                    <div className='flex flex-col items-center gap-2'>
+                      <div className='w-16 h-16 rounded-2xl bg-card border-2 border-border flex items-center justify-center'>
+                        <span className='text-3xl'>👟</span>
+                      </div>
+                    </div>
+                    <div className='flex flex-col items-center gap-2 opacity-50'>
+                      <div className='w-4 h-4 rounded-full bg-border' />
+                      <div className='w-4 h-4 rounded-full bg-border' />
+                      <div className='w-4 h-4 rounded-full bg-border' />
+                    </div>
+                    <div className='flex flex-col items-center gap-2'>
+                      <div className='w-16 h-16 rounded-2xl bg-card border-2 border-border flex items-center justify-center'>
+                        <span className='text-3xl'>🥗</span>
+                      </div>
+                    </div>
+                    <div className='flex flex-col items-center gap-2 opacity-50'>
+                      <div className='w-4 h-4 rounded-full bg-border' />
+                      <div className='w-4 h-4 rounded-full bg-border' />
+                      <div className='w-4 h-4 rounded-full bg-border' />
+                    </div>
+                    <div className='flex flex-col items-center gap-2'>
+                      <div className='w-16 h-16 rounded-2xl bg-card border-2 border-border flex items-center justify-center'>
+                        <span className='text-3xl'>💧</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Logo */}
+                  <div className='mb-8'>
+                    <div className='w-24 h-24 mx-auto rounded-3xl bg-card border-2 border-border flex items-center justify-center'>
+                      <div className='text-3xl font-bold'>
+                        Wel<span className='text-primary'>mi</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='space-y-4'>
+                  <h2 className='text-3xl font-bold'>
+                    Connect to Apple Health
+                  </h2>
+                  <p className='text-muted-foreground px-4'>
+                    Sync your daily activity between Welmi and Apple Health to
+                    have the most reliable data
+                  </p>
+                </div>
+
+                <Button onClick={next} className='w-full h-14 text-lg'>
+                  Continue
+                </Button>
+              </div>
+            )}
+
+            {/* Step 15: Burned Calories */}
+            {step === 15 && (
+              <div className='space-y-8'>
+                <div className='text-center'>
+                  <h2 className='text-3xl font-bold mb-2'>
+                    Let Welmi update your calorie tracker for you
+                  </h2>
+                </div>
+
+                {/* Activity Cards */}
+                <div className='relative h-[400px]'>
+                  {/* Walking Card */}
+                  <div className='absolute top-0 left-8 w-48 bg-card border-2 border-border rounded-3xl p-6 shadow-lg z-20'>
+                    <div className='space-y-4'>
+                      <div className='w-20 h-20 bg-background rounded-2xl flex items-center justify-center'>
+                        <span className='text-4xl'>👟</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Walking Calories Bubble */}
+                  <div className='absolute top-0 right-4 bg-card border-2 border-border rounded-3xl p-6 shadow-lg z-30'>
+                    <div className='text-center space-y-2'>
+                      <div className='text-primary text-3xl'>🔥</div>
+                      <div className='text-muted-foreground text-sm'>
+                        Walking
+                      </div>
+                      <div className='text-2xl font-bold'>+400 cals</div>
+                    </div>
+                  </div>
+
+                  {/* Gym Card */}
+                  <div className='absolute bottom-8 right-8 w-56 bg-card border-2 border-border rounded-3xl p-6 shadow-lg z-20'>
+                    <div className='space-y-4'>
+                      <div className='w-24 h-24 bg-background rounded-2xl flex items-center justify-center'>
+                        <span className='text-5xl'>🏋️</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Gym Calories Bubble */}
+                  <div className='absolute bottom-0 left-4 bg-card border-2 border-border rounded-3xl p-6 shadow-lg z-30'>
+                    <div className='text-center space-y-2'>
+                      <div className='text-primary text-3xl'>🔥</div>
+                      <div className='text-muted-foreground text-sm'>Gym</div>
+                      <div className='text-2xl font-bold'>+200 cals</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Buttons */}
+                <div className='flex gap-4'>
+                  <Button
+                    variant='outline'
+                    onClick={() => {
+                      setForm({ ...form, add_burned_calories: false });
+                      next();
+                    }}
+                    className='flex-1 h-14 text-lg'
+                  >
+                    No
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setForm({ ...form, add_burned_calories: true });
+                      next();
+                    }}
+                    className='flex-1 h-14 text-lg'
+                  >
+                    Yes
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Step 16: Progress Check Day */}
+            {step === 16 && (
+              <div className='space-y-8'>
+                <div className='text-center'>
+                  <h2 className='text-3xl font-bold mb-2'>
+                    Set your first progress check day
+                  </h2>
+                  <p className='text-muted-foreground'>
+                    We'll use your weigh-in to track your progress and make
+                    adjustments for you if needed
+                  </p>
+                </div>
+
+                {/* Day Picker */}
+                <div className='py-8'>
+                  <Picker
+                    min={5}
+                    max={13}
+                    value={progressCheckDay}
+                    onChange={setProgressCheckDay}
+                    unit='days'
+                  />
+                </div>
+
+                {/* Expected Drop Info */}
+                <div className='bg-card border-2 border-primary/20 rounded-2xl p-6'>
+                  <div className='flex items-start gap-4'>
+                    <div className='w-6 h-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5'>
+                      <Check className='w-4 h-4 text-white' />
+                    </div>
+                    <div className='space-y-2'>
+                      <h3 className='font-semibold text-lg'>
+                        Expected drop: {form.weekly_goal_kg} kg
+                      </h3>
+                      <p className='text-sm text-muted-foreground'>
+                        You will notice changes in how you feel as your body
+                        adjusts to healthier habits. This is a normal response to
+                        positive lifestyle changes.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <Button onClick={next} className='w-full h-14 text-lg'>
+                  Continue
+                </Button>
+              </div>
+            )}
+
+            {/* Step 17: Sign-in Options */}
+            {step === 17 && (
+              <div className='space-y-8 text-center'>
+                {/* Background Food Images Grid (decorative) */}
+                <div className='relative h-[300px] -mx-4 mb-8'>
+                  <div className='absolute inset-0 grid grid-cols-2 gap-4 opacity-50'>
+                    <div className='bg-card rounded-3xl' />
+                    <div className='bg-card rounded-3xl' />
+                    <div className='bg-card rounded-3xl' />
+                    <div className='bg-card rounded-3xl' />
+                  </div>
+                  <div className='absolute inset-0 flex items-center justify-center'>
+                    <div className='bg-background/95 backdrop-blur-sm rounded-3xl p-8 max-w-sm'>
+                      <h2 className='text-3xl font-bold mb-2'>
+                        You're almost there!
+                      </h2>
+                      <p className='text-muted-foreground'>
+                        Use your account to keep your personalization at your
+                        fingertips
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='space-y-4'>
+                  <Button
+                    variant='outline'
+                    onClick={async () => {
+                      try {
+                        const { error } = await supabase.auth.signInWithOAuth({
+                          provider: 'apple',
+                          options: {
+                            redirectTo: `${window.location.origin}/`,
+                          },
+                        });
+                        if (error) throw error;
+                      } catch (err) {
+                        toast({
+                          title: 'Error',
+                          description: 'Apple sign-in not configured yet',
+                          variant: 'destructive',
+                        });
+                      }
+                    }}
+                    className='w-full h-14 text-lg'
+                  >
+                    <svg
+                      className='w-5 h-5 mr-2'
+                      viewBox='0 0 24 24'
+                      fill='currentColor'
+                    >
+                      <path d='M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z' />
+                    </svg>
+                    Continue with Apple
+                  </Button>
+
+                  <Button
+                    variant='outline'
+                    onClick={async () => {
+                      try {
+                        const { error } = await supabase.auth.signInWithOAuth({
+                          provider: 'google',
+                          options: {
+                            redirectTo: `${window.location.origin}/`,
+                          },
+                        });
+                        if (error) throw error;
+                      } catch (err) {
+                        toast({
+                          title: 'Error',
+                          description: 'Google sign-in not configured yet. Please configure in Lovable Cloud settings.',
+                          variant: 'destructive',
+                        });
+                      }
+                    }}
+                    className='w-full h-14 text-lg'
+                  >
+                    <svg
+                      className='w-5 h-5 mr-2'
+                      viewBox='0 0 24 24'
+                    >
+                      <path
+                        fill='#4285F4'
+                        d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z'
+                      />
+                      <path
+                        fill='#34A853'
+                        d='M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z'
+                      />
+                      <path
+                        fill='#FBBC05'
+                        d='M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z'
+                      />
+                      <path
+                        fill='#EA4335'
+                        d='M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z'
+                      />
+                    </svg>
+                    Continue with Google
+                  </Button>
+
+                  <Button onClick={next} variant='ghost' className='w-full'>
+                    Continue with Email
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Step 18: Disclaimer */}
+            {step === 18 && (
               <div className='space-y-8 text-center'>
                 <Heart
                   className='w-24 h-24 mx-auto text-primary'
