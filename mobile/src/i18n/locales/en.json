@@ -1,0 +1,538 @@
+{
+  "common": {
+    "appName": "Welmi",
+    "brandAuth": "NutriTrack",
+    "continue": "Continue",
+    "back": "Back",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "submit": "Submit",
+    "skip": "Skip for now",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "or": "or",
+    "loading": "Please wait",
+    "success": "Success",
+    "error": "Error",
+    "comingSoonTitle": "Coming soon",
+    "comingSoonDescription": "This feature will be available in a future update.",
+    "per": "per",
+    "units": {
+      "kcal": "kcal",
+      "kg": "kg",
+      "cm": "cm",
+      "ml": "ml",
+      "steps_one": "{{count}} step",
+      "steps_other": "{{count}} steps",
+      "minutes_one": "{{count}} min",
+      "minutes_other": "{{count}} min",
+      "days_one": "{{count}} day",
+      "days_other": "{{count}} days"
+    }
+  },
+  "bottomNav": {
+    "diary": "Diary",
+    "recipes": "Recipes",
+    "add": "Add",
+    "progress": "Progress",
+    "profile": "Profile",
+    "me": "Me"
+  },
+  "navigation": {
+    "addSearch": "Search foods",
+    "addBarcode": "Scan barcode",
+    "addPhoto": "Log from photo",
+    "addVoice": "Voice entry",
+    "recipe": "Recipe"
+  },
+  "index": {
+    "title": "Welcome to Welmi",
+    "subtitle": "Start your personalized nutrition journey."
+  },
+  "languageIntro": {
+    "title": "Choose your language",
+    "subtitle": "You can change it anytime in Settings."
+  },
+  "notFound": {
+    "message": "Oops! Page not found",
+    "cta": "Return to Home"
+  },
+  "auth": {
+    "title": "NutriTrack",
+    "welcomeBack": "Welcome back",
+    "phoneLabel": "Phone number",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Password (min 6 characters)",
+    "signIn": "Sign In",
+    "dividerText": "Or continue with",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithApple": "Continue with Apple",
+    "passwordRequiredTitle": "Password required",
+    "passwordRequiredDescription": "Please enter your password (min 6 characters).",
+    "phoneError": "Enter {{min}}-{{max}} digits for this country",
+    "passwordError": "Password must be at least 6 characters",
+    "signInUnknown": "Unable to sign you in. Please try again.",
+    "welcomeToast": "Welcome back!",
+    "googleErrorTitle": "Google Sign-in",
+    "googleErrorDescription": "Google sign-in not configured. Please set it up in your Supabase / Lovable Cloud settings.",
+    "appleErrorTitle": "Apple Sign-in",
+    "appleErrorDescription": "Apple sign-in not configured yet."
+  },
+  "onboarding": {
+    "welcome": {
+      "headline": "Starting out is the hardest part – and you have already done it!",
+      "subtitle": "Let's personalize your journey together",
+      "signInPrompt": "I already have an account",
+      "signIn": "Sign In"
+    },
+    "goal": {
+      "title": "What's your goal?",
+      "subtitle": "Help us understand your motivation",
+      "options": {
+        "loseWeight": "Lose weight",
+        "buildWeight": "Build healthy weight",
+        "getHealthier": "Get healthier",
+        "lookBetter": "Look better",
+        "moreEnergy": "Have more energy"
+      },
+      "agreement": "By continuing, you agree to our Terms of Use and Privacy Policy"
+    },
+    "support": {
+      "title": "Support that actually works",
+      "subtitle": "Your nutritionist is always here to keep you on track",
+      "goalLabel": "Goal: {{goal}}",
+      "fallbackGoal": "Better habits",
+      "labels": {
+        "default": "Consistent, guided progress",
+        "loseWeight": "Steady, safe weight loss",
+        "buildWeight": "Gain weight the healthy way",
+        "getHealthier": "Healthier daily habits",
+        "lookBetter": "Body recomposition",
+        "moreEnergy": "Energy that lasts"
+      },
+      "blurbs": {
+        "default": "Personalized support keeps you accountable and steadily moving toward your target.",
+        "loseWeight": "With coaching, your calorie deficit stays consistent and safer for long-term success.",
+        "buildWeight": "We will focus on nutrient-dense meals and enough movement to support lean gains without feeling sluggish.",
+        "getHealthier": "Structured routines make it easier to hit nutrition and movement targets every day.",
+        "lookBetter": "Balanced macros and accountability help you tighten up and build a leaner look.",
+        "moreEnergy": "Dialed-in nutrition, hydration, and sleep routines keep your energy more stable."
+      },
+      "axisResult": "Result",
+      "axisTime": "Time",
+      "withCoach": "With a nutritionist",
+      "withoutCoach": "On your own"
+    },
+    "gender": {
+      "title": "What's your gender?",
+      "subtitle": "Your metabolism is unique and it can vary by gender",
+      "male": "Male",
+      "female": "Female"
+    },
+    "age": {
+      "title": "How old are you?",
+      "subtitle": "Metabolism can change with age"
+    },
+    "height": {
+      "title": "What's your height?",
+      "subtitle": "Your height helps shape your body proportions",
+      "unit": "cm"
+    },
+    "weight": {
+      "title": "What's your weight?",
+      "subtitle": "This is where your journey begins",
+      "unit": "kg"
+    },
+    "activity": {
+      "title": "What's your activity level?",
+      "subtitle": "This helps us calculate your daily needs",
+      "options": {
+        "inactive": {
+          "label": "Mostly inactive",
+          "desc": "I have a desk job"
+        },
+        "light": {
+          "label": "Lightly active",
+          "desc": "I move a bit during the day"
+        },
+        "active": {
+          "label": "Active",
+          "desc": "I include workouts"
+        },
+        "veryActive": {
+          "label": "Very active",
+          "desc": "I am active most of the day"
+        }
+      }
+    },
+    "conditions": {
+      "title": "What should we take into account?",
+      "subtitle": "We keep your health needs in mind",
+      "options": {
+        "gastric": "Gastric Disease",
+        "cholesterol": "High Cholesterol",
+        "thyroid": "Thyroid Disease",
+        "diabetes": "Diabetes",
+        "glp1": "GLP-1 Therapy"
+      },
+      "none": "No health conditions"
+    },
+    "target": {
+      "title": "What's your target weight?",
+      "subtitle": "Let's set a goal you can achieve",
+      "current": "Current: {{weight}} kg",
+      "healthyTarget": "A healthy target is about {{weight}} kg",
+      "outsideRange": "Outside healthy range",
+      "healthyInfo": "This puts you in a healthy BMI range. It can boost your energy and lower health risks.",
+      "outsideInfo": "Adjusting your weight to be within the healthy range could be supportive for your health and energy levels."
+    },
+    "pace": {
+      "title": "Pick a pace that works for you",
+      "expected": "Expected progress per week",
+      "suggested": "Suggested for {{goal}}: {{value}} kg/week",
+      "recommendedMax": "Recommended max for you: {{value}} kg/week",
+      "slider": {
+        "easy": "Easy",
+        "balanced": "Balanced",
+        "strict": "Strict"
+      },
+      "warning": "This pace is quite aggressive for your profile. Try lowering the slider closer to {{pace}} kg/week for safer, more sustainable progress.",
+      "goalDate": "Reach your goal by {{date}}",
+      "goalClose": "You are already very close to your goal",
+      "calorieNote": "Daily calorie goal – {{calories}} kcal. It's balanced, sustainable, and supports your long-term success goals."
+    },
+    "program": {
+      "title": "Pick your program steps",
+      "subtitle": "Each one will support your goal in different ways!",
+      "options": {
+        "logMeals": {
+          "label": "Log your meals",
+          "desc": "Create long-term healthy habits"
+        },
+        "cookHealthy": {
+          "label": "Cook healthy meals",
+          "desc": "Adds variety of recipes you can pick from"
+        },
+        "moveMore": {
+          "label": "Move more during the day",
+          "desc": "Boosts energy and gives you more flexibility with your calories"
+        }
+      }
+    },
+    "customizing": {
+      "title": "Customizing your program",
+      "items": {
+        "profile": "Analyzing profile",
+        "metabolism": "Metabolism Insights",
+        "plan": "Generating meal plan",
+        "health": "Health condition",
+        "balanced": "Balanced",
+        "takenIntoAccount": "Taken into account",
+        "none": "None"
+      }
+    },
+    "timeline": {
+      "title": "See what's ahead",
+      "todayTitle": "Today – {{date}} – {{weight}} kg",
+      "todayDesc": "You want to {{direction}} {{change}} kg",
+      "weekTitle": "In 1 week – {{date}} – {{weight}} kg",
+      "weekDesc": "You'll see your first results — around {{change}} kg {{direction}}. This is the first win that comes from fixing habits and building a healthier relationship with food.",
+      "goalTitle": "In {{months}} months – {{date}} – {{weight}} kg",
+      "goalDesc": "You'll reach your goal of {{directionVerb}} {{change}} kg. You'll feel better, more energetic, and proud of how far you've come.",
+      "directions": {
+        "lose": "lose",
+        "gain": "gain",
+        "loseVerb": "losing",
+        "gainVerb": "gaining"
+      }
+    },
+    "health": {
+      "title": "Connect to {{service}}",
+      "subtitle": "Sync your daily activity between Welmi and {{service}} so your calorie targets stay accurate on this device.",
+      "list": {
+        "steps": "Steps, distance, and active calories",
+        "workouts": "Workout time and weight updates",
+        "hydration": "Hydration you log in Welmi"
+      },
+      "connected": "Connected to {{service}}",
+      "connect": "Connect {{service}}",
+      "skip": "Skip for now",
+      "services": {
+        "apple": "Apple Health",
+        "google": "Google Fit",
+        "default": "health data"
+      }
+    },
+    "burned": {
+      "title": "Let Welmi update your calorie tracker for you",
+      "walking": "Walking",
+      "gym": "Gym",
+      "addBurned": "+{{calories}} cals"
+    },
+    "progressCheck": {
+      "title": "Set your first progress check day",
+      "subtitle": "We'll use your weigh-in to track your progress and make adjustments for you if needed",
+      "expectedDrop": "Expected drop: {{weight}} kg",
+      "note": "You will notice changes in how you feel as your body adjusts to healthier habits. This is a normal response to positive lifestyle changes."
+    },
+    "disclaimer": {
+      "title": "Guiding you with care",
+      "text": "Welmi provides personalized eating recommendations, adapting to your individual health profile and dietary needs.",
+      "textSmall": "However, our app is not a substitute for professional medical advice. Before starting any new diet or if you have any health concerns, always consult a qualified healthcare professional.",
+      "cta": "Okay, got it",
+      "loading": "Setting up..."
+    },
+    "signin": {
+      "title": "You're almost there!",
+      "subtitle": "Use your account to keep your personalization at your fingertips.",
+      "apple": "Continue with Apple",
+      "google": "Continue with Google",
+      "phone": "Continue with Phone Number"
+    },
+    "modal": {
+      "title": "Enter your phone",
+      "subtitle": "Include country code so we can reach you if needed.",
+      "passwordPlaceholder": "Password (min 6 characters)",
+      "cancel": "Cancel",
+      "submit": "Submit"
+    },
+    "meta": {
+      "suggestedSteps": "Suggested for {{goal}}: {{steps}} steps/day"
+    },
+    "toasts": {
+      "phoneSavedTitle": "Phone saved",
+      "phoneSavedMessage": "We will use this number for your account.",
+      "verificationNeededTitle": "Verification needed",
+      "verificationNeededMessage": "Please confirm your account and try signing in again.",
+      "errorTitle": "Error",
+      "signInRequiredTitle": "Sign in required",
+      "signInRequiredMessage": "Please sign in or create an account to continue.",
+      "connectedTitle": "Connected",
+      "connectedMessage": "Welmi can sync with {{service}}.",
+      "healthFailedTitle": "Health connection failed",
+      "profileCreatedTitle": "Profile created",
+      "profileCreatedMessage": "Welcome!"
+    }
+  },
+  "diary": {
+    "title": "Diary",
+    "date": "{{date}}",
+    "today": "Today",
+    "eaten": "Eaten",
+    "burned": "Burned",
+    "kcalLeft": "kcal left",
+    "carbs": "Carbs",
+    "protein": "Protein",
+    "fats": "Fats",
+    "steps": "Steps",
+    "stepsLabel": "{{count}} steps",
+    "water": "Water",
+    "journal": "Journal",
+    "empty": "No meals logged yet today",
+    "mealFallback": "Meal",
+    "kcal": "{{value}} kcal"
+  },
+  "add": {
+    "title": "Add Food",
+    "photo": {
+      "title": "Take a Photo",
+      "subtitle": "AI will detect food and estimate calories"
+    },
+    "search": {
+      "title": "Search Foods",
+      "subtitle": "Browse our food database"
+    },
+    "barcode": {
+      "title": "Scan Barcode",
+      "subtitle": "Scan packaged food labels"
+    },
+    "voice": {
+      "title": "Voice Input",
+      "subtitle": "Say what you ate"
+    }
+  },
+  "addSearch": {
+    "title": "Search Foods",
+    "placeholder": "Search for food...",
+    "nutrients": {
+      "calories": "Calories",
+      "protein": "Protein",
+      "carbs": "Carbs",
+      "fats": "Fats"
+    },
+    "quantity": "Quantity ({{unit}})",
+    "back": "Back",
+    "save": "Save",
+    "resultDetails": "{{calories}} kcal per {{size}} {{unit}}",
+    "searchError": "Failed to search foods",
+    "saveSuccess": "Meal saved to your diary",
+    "saveError": "Failed to save meal"
+  },
+  "addBarcode": {
+    "title": "Scan Barcode",
+    "description": "This feature uses the device camera to scan product barcodes",
+    "openScanner": "Open Camera Scanner",
+    "manualLabel": "Enter barcode manually",
+    "placeholder": "123456789012",
+    "lookup": "Look Up Product",
+    "back": "Back"
+  },
+  "addPhoto": {
+    "title": "Log with Photo",
+    "changePhoto": "Change Photo",
+    "takePhoto": "Take or Upload Photo",
+    "analyzing": "Analyzing...",
+    "analyze": "Analyze Photo",
+    "detected": "Detected Foods",
+    "fields": {
+      "grams": "Grams",
+      "calories": "Calories",
+      "protein": "Protein (g)",
+      "carbs": "Carbs (g)",
+      "fats": "Fats (g)"
+    },
+    "saveMeal": "Save Meal",
+    "noFoodTitle": "No food detected",
+    "noFoodDescription": "Try taking a clearer photo of your meal",
+    "cameraDeniedTitle": "Camera permission denied",
+    "cameraDeniedDescription": "Enable camera permissions in settings to take a photo.",
+    "errorAnalyze": "Failed to analyze image",
+    "errorSave": "Failed to save meal",
+    "photoMealName": "Photo meal"
+  },
+  "addVoice": {
+    "title": "Voice Input",
+    "listening": "Listening...",
+    "processing": "Processing...",
+    "startRecording": "Start Recording",
+    "instruction": "Tap the button and say what you ate",
+    "example": "Example: \"Two eggs and a slice of toast\"",
+    "unavailableTitle": "Unavailable",
+    "unavailableDescription": "Voice recognition is not available in this build.",
+    "notSupportedTitle": "Not Supported",
+    "notSupportedDescription": "Speech recognition is not available or failed to start",
+    "speechError": "Failed to recognize speech",
+    "noFoodTitle": "No food detected",
+    "noFoodDescription": "Try speaking more clearly about what you ate",
+    "successDescription": "Meal saved to your diary",
+    "errorProcess": "Failed to process voice input",
+    "back": "Back",
+    "voiceMealName": "Voice logged meal"
+  },
+  "recipes": {
+    "title": "Recipes",
+    "filter": "Filter",
+    "favorites": "Favorites",
+    "popular": "Popular",
+    "mealTypes": {
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "dinner": "Dinner",
+      "snack": "Snack"
+    },
+    "noImage": "No image",
+    "empty": "No recipes found",
+    "prep": "Prep: {{time}}",
+    "servings": "Servings: {{count}}"
+  },
+  "recipeDetail": {
+    "notFound": "Recipe not found.",
+    "noImage": "No image",
+    "anyMeal": "Any meal",
+    "prep": "Prep: {{time}}",
+    "servings": "Servings: {{count}}",
+    "macros": "Macros",
+    "macroSummary": "{{calories}} kcal · P {{protein}} · C {{carbs}} · F {{fats}}"
+  },
+  "progress": {
+    "header": "Last entry, {{date}}",
+    "start": "Start",
+    "goal": "Goal",
+    "currentWeight": "Current weight",
+    "planTitle": "Plan",
+    "planBody": "Your metabolism burns {{burn}} kcal and your daily calorie goal is {{goal}} kcal. With this 500 kcal deficit, you can expect to lose about 1 kg per week, reaching your goal by {{date}}.",
+    "planReminder": "To stay on track, make sure to log your meals in your food diary every day.",
+    "bmiTitle": "Body Mass Index",
+    "bmiBadge": "Need attention ⚖️",
+    "bmiInfo": "According to the World Health Organization, reducing BMI to the normal range lowers the risk of chronic diseases and improves overall well-being.",
+    "logMeasurements": "Log measurements"
+  },
+  "settings": {
+    "title": "Settings",
+    "customerSupport": "Customer Support",
+    "sections": {
+      "dailyGoals": "Daily Goals",
+      "plan": "Plan",
+      "personalization": "Personalization",
+      "language": "Language"
+    },
+    "rows": {
+      "calories": "Calories & macros",
+      "steps": "Steps",
+      "hydration": "Hydration",
+      "burned": "Add Burned Calories",
+      "weeklyGoal": "Weekly Goal",
+      "activity": "Activity Level",
+      "currentWeight": "Current Weight",
+      "goalWeight": "Goal Weight",
+      "gender": "Gender",
+      "age": "Age",
+      "height": "Height",
+      "language": "Language"
+    },
+    "values": {
+      "perWeek": "{{value}} kg per week",
+      "inactive": "Inactive",
+      "light": "Light",
+      "moderate": "Moderate",
+      "active": "Active",
+      "veryActive": "Very Active",
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "signOut": "Sign Out",
+    "modals": {
+      "caloriesTitle": "Daily Calorie Goal",
+      "caloriesLabel": "Calories (kcal)",
+      "stepsTitle": "Daily Steps Goal",
+      "stepsLabel": "Steps",
+      "waterTitle": "Daily Water Goal",
+      "waterLabel": "Water (ml)",
+      "activityTitle": "Activity Level",
+      "currentWeightTitle": "Current Weight",
+      "goalWeightTitle": "Goal Weight",
+      "weightLabel": "Weight (kg)",
+      "genderTitle": "Gender",
+      "ageTitle": "Age",
+      "ageLabel": "Age (years)",
+      "heightTitle": "Height",
+      "heightLabel": "Height (cm)",
+      "close": "Close",
+      "save": "Save"
+    },
+    "language": {
+      "current": "Current language",
+      "options": {
+        "uzLatn": "Uzbek (Latin)",
+        "uzCyrl": "Uzbek (Кирилл)",
+        "en": "English",
+        "ru": "Русский"
+      }
+    },
+    "toasts": {
+      "updated": "Updated successfully",
+      "updatedDescription": "Your profile has been updated."
+    }
+  },
+  "health": {
+    "googleCancelled": "Google Fit authorization was cancelled.",
+    "googleError": "Unable to connect to Google Fit. Please try again.",
+    "appleUnavailable": "Apple Health is not available. Rebuild with HealthKit enabled (expo prebuild --clean -p ios && install the dev build on device).",
+    "appleDenied": "Apple Health permissions were not granted. Please try again.",
+    "appleUnavailableDevice": "Apple Health is not available on this device.",
+    "unavailable": "Health permissions are only available on iOS or Android devices."
+  }
+}

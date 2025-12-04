@@ -1,0 +1,538 @@
+{
+  "common": {
+    "appName": "Welmi",
+    "brandAuth": "NutriTrack",
+    "continue": "Davom etish",
+    "back": "Ortga",
+    "close": "Yopish",
+    "cancel": "Bekor qilish",
+    "save": "Saqlash",
+    "submit": "Yuborish",
+    "skip": "Hozircha o'tkazib yuborish",
+    "yes": "Ha",
+    "no": "Yo'q",
+    "ok": "OK",
+    "or": "yoki",
+    "loading": "Iltimos, kuting",
+    "success": "Muvaffaqiyatli",
+    "error": "Xato",
+    "comingSoonTitle": "Tez orada",
+    "comingSoonDescription": "Bu funksiya keyingi yangilanishda paydo bo'ladi.",
+    "per": "har",
+    "units": {
+      "kcal": "kkal",
+      "kg": "kg",
+      "cm": "sm",
+      "ml": "ml",
+      "steps_one": "{{count}} qadam",
+      "steps_other": "{{count}} qadam",
+      "minutes_one": "{{count}} daqiqa",
+      "minutes_other": "{{count}} daqiqa",
+      "days_one": "{{count}} kun",
+      "days_other": "{{count}} kun"
+    }
+  },
+  "bottomNav": {
+    "diary": "Kundalik",
+    "recipes": "Retseptlar",
+    "add": "Qo'shish",
+    "progress": "Natijalar",
+    "profile": "Profil",
+    "me": "Men"
+  },
+  "navigation": {
+    "addSearch": "Ovqatlarni qidirish",
+    "addBarcode": "Shtrixkod skaneri",
+    "addPhoto": "Fotodan kiritish",
+    "addVoice": "Ovozli kiritish",
+    "recipe": "Retsept"
+  },
+  "index": {
+    "title": "Welmiga xush kelibsiz",
+    "subtitle": "Shaxsiylashtirilgan ovqatlanish sayohatingizni boshlang."
+  },
+  "languageIntro": {
+    "title": "Tilni tanlang",
+    "subtitle": "Istalgan payt Sozlamalarda o'zgartirishingiz mumkin."
+  },
+  "notFound": {
+    "message": "Kechirasiz, sahifa topilmadi",
+    "cta": "Bosh sahifaga qaytish"
+  },
+  "auth": {
+    "title": "NutriTrack",
+    "welcomeBack": "Qaytganingizdan xursandmiz",
+    "phoneLabel": "Telefon raqami",
+    "passwordLabel": "Parol",
+    "passwordPlaceholder": "Parol (kamida 6 ta belgi)",
+    "signIn": "Kirish",
+    "dividerText": "Yoki quyidagilar bilan davom eting",
+    "continueWithGoogle": "Google orqali davom etish",
+    "continueWithApple": "Apple orqali davom etish",
+    "passwordRequiredTitle": "Parol talab qilinadi",
+    "passwordRequiredDescription": "Iltimos, parolni kiriting (kamida 6 ta belgi).",
+    "phoneError": "Ushbu davlat uchun {{min}}-{{max}} ta raqam kiriting",
+    "passwordError": "Parol kamida 6 ta belgidan iborat bo'lishi kerak",
+    "signInUnknown": "Kirish muvaffaqiyatsiz. Qayta urinib ko'ring.",
+    "welcomeToast": "Xush kelibsiz!",
+    "googleErrorTitle": "Google orqali kirish",
+    "googleErrorDescription": "Google orqali kirish sozlanmagan. Iltimos, Supabase yoki Lovable Cloud sozlamalarida yoqing.",
+    "appleErrorTitle": "Apple orqali kirish",
+    "appleErrorDescription": "Apple orqali kirish hali sozlanmagan."
+  },
+  "onboarding": {
+    "welcome": {
+      "headline": "Boshlash eng qiyin qadam – siz allaqachon uddaladingiz!",
+      "subtitle": "Keling, safaringizni shaxsiylashtiramiz",
+      "signInPrompt": "Menda akkaunt bor",
+      "signIn": "Kirish"
+    },
+    "goal": {
+      "title": "Maqsadingiz nima?",
+      "subtitle": "Motivatsiyangizni tushunishga yordam bering",
+      "options": {
+        "loseWeight": "Vazn kamaytirish",
+        "buildWeight": "Sog'lom vazn to'plash",
+        "getHealthier": "Sog'lomlashish",
+        "lookBetter": "Yaxshiroq ko'rinish",
+        "moreEnergy": "Ko'proq energiya"
+      },
+      "agreement": "Davom etish orqali Foydalanish shartlari va Maxfiylik siyosatiga rozilik bildirasiz"
+    },
+    "support": {
+      "title": "Haqiqatan ishlaydigan yordam",
+      "subtitle": "Dietologingiz yo'ldan chiqmaslikka yordam beradi",
+      "goalLabel": "Maqsad: {{goal}}",
+      "fallbackGoal": "Sog'lom odatlar",
+      "labels": {
+        "default": "Izchil, yo'naltirilgan natijalar",
+        "loseWeight": "Xavfsiz, barqaror ozish",
+        "buildWeight": "Sog'lom tarzda vazn to'plash",
+        "getHealthier": "Har kunlik sog'lom odatlar",
+        "lookBetter": "Tana kompozitsiyasi",
+        "moreEnergy": "Barqaror energiya"
+      },
+      "blurbs": {
+        "default": "Shaxsiy ko'mak sizni javobgar qiladi va maqsad sari tinch harakatlanasiz.",
+        "loseWeight": "Dietolog bilan kaloriya tanqisligi xavfsiz va izchil bo'ladi, uzoq muddatli muvaffaqiyat uchun.",
+        "buildWeight": "Sizni toliq qilmaydigan, oziqaga boy taomlar va yetarli harakatlarga e'tibor qaratamiz.",
+        "getHealthier": "Tuzilgan kundaliklar har kuni ovqatlanish va harakat maqsadlariga erishishni osonlashtiradi.",
+        "lookBetter": "Muvozanatli makros va nazorat yanada tarang va chiroyli ko'rinishga yordam beradi.",
+        "moreEnergy": "To'g'ri ovqatlanish, namlik va uyqu rejimi energiyani barqaror qiladi."
+      },
+      "axisResult": "Natija",
+      "axisTime": "Vaqt",
+      "withCoach": "Dietolog bilan",
+      "withoutCoach": "O'zingiz"
+    },
+    "gender": {
+      "title": "Jinsingiz?",
+      "subtitle": "Metabolizm jinsga qarab farq qilishi mumkin",
+      "male": "Erkak",
+      "female": "Ayol"
+    },
+    "age": {
+      "title": "Yoshingiz nechida?",
+      "subtitle": "Metabolizm yosh bilan o'zgarishi mumkin"
+    },
+    "height": {
+      "title": "Bo'yingiz necha sm?",
+      "subtitle": "Bo'yingiz tana proporsiyangizni belgilashga yordam beradi",
+      "unit": "sm"
+    },
+    "weight": {
+      "title": "Vazningiz qancha?",
+      "subtitle": "Safaringiz shu yerda boshlanadi",
+      "unit": "kg"
+    },
+    "activity": {
+      "title": "Faollik darajangiz qanday?",
+      "subtitle": "Bu kunlik ehtiyojlarni hisoblashga yordam beradi",
+      "options": {
+        "inactive": {
+          "label": "Ko'pincha harakatsiz",
+          "desc": "Ofisda ishlayman yoki kam harakat qilaman"
+        },
+        "light": {
+          "label": "Ozroq faol",
+          "desc": "Kun davomida biroz harakat qilaman"
+        },
+        "active": {
+          "label": "Faol",
+          "desc": "Mashg'ulotlarni qo'shib turaman"
+        },
+        "veryActive": {
+          "label": "Juda faol",
+          "desc": "Kun bo'yi faolman"
+        }
+      }
+    },
+    "conditions": {
+      "title": "Nimani inobatga olaylik?",
+      "subtitle": "Sog'lig'ingiz ehtiyojlarini hisobga olamiz",
+      "options": {
+        "gastric": "Gastrit yoki oshqozon kasalligi",
+        "cholesterol": "Yuqori xolesterin",
+        "thyroid": "Qalqonsimon bez kasalligi",
+        "diabetes": "Diabet",
+        "glp1": "GLP-1 terapiyasi"
+      },
+      "none": "Sog'liq bo'yicha cheklov yo'q"
+    },
+    "target": {
+      "title": "Maqsad vazningiz?",
+      "subtitle": "Amalga oshirsa bo'ladigan maqsadni belgilaymiz",
+      "current": "Joriy: {{weight}} kg",
+      "healthyTarget": "Sog'lom maqsad taxminan {{weight}} kg",
+      "outsideRange": "Sog'lom oraliqdan tashqarida",
+      "healthyInfo": "Bu sizni sog'lom BMI oralig'iga kiritadi, energiya va sog'liq xavflarini yaxshilaydi.",
+      "outsideInfo": "Sog'lom oraliqqa yaqinlashish salomatlik va energiyangizga foydali bo'lishi mumkin."
+    },
+    "pace": {
+      "title": "Sizga mos tezlikni tanlang",
+      "expected": "Haftalik kutilgan o'zgarish",
+      "suggested": "{{goal}} uchun tavsiya: {{value}} kg/hafta",
+      "recommendedMax": "Siz uchun tavsiya etilgan maksimum: {{value}} kg/hafta",
+      "slider": {
+        "easy": "Yengil",
+        "balanced": "Muvozanatli",
+        "strict": "Qattiq"
+      },
+      "warning": "Bu tezlik profilingiz uchun agressiv. Xavfsizroq natijalar uchun uni {{pace}} kg/haftaga yaqinroq tushiring.",
+      "goalDate": "Maqsadingizga {{date}} sanasiga yetasiz",
+      "goalClose": "Siz allaqachon maqsadga juda yaqin ekansiz",
+      "calorieNote": "Kunlik kaloriya maqsadi – {{calories}} kkal. Bu muvozanatli, barqaror va uzoq muddatli natijalarni qo'llab-quvvatlaydi."
+    },
+    "program": {
+      "title": "Dastur qadamlari",
+      "subtitle": "Har biri maqsadingizga boshqacha yordam beradi!",
+      "options": {
+        "logMeals": {
+          "label": "Ovqatlaringizni yozib boring",
+          "desc": "Sog'lom odatlarni shakllantiradi"
+        },
+        "cookHealthy": {
+          "label": "Sog'lom taom pishirish",
+          "desc": "Tanlash uchun turli retseptlar qo'shiladi"
+        },
+        "moveMore": {
+          "label": "Kun davomida ko'proq harakat",
+          "desc": "Energiya beradi va kaloriyani moslashuvchan qiladi"
+        }
+      }
+    },
+    "customizing": {
+      "title": "Dasturingizni moslashtiryapmiz",
+      "items": {
+        "profile": "Profil tahlili",
+        "metabolism": "Metabolizm tahlili",
+        "plan": "Ovqatlanish rejasi yaratilmoqda",
+        "health": "Sog'liq holati",
+        "balanced": "Muvozanatli",
+        "takenIntoAccount": "Inobatga olindi",
+        "none": "Yo'q"
+      }
+    },
+    "timeline": {
+      "title": "Oldinda nimalar bor",
+      "todayTitle": "Bugun – {{date}} – {{weight}} kg",
+      "todayDesc": "Siz {{direction}} {{change}} kg ni xohlaysiz",
+      "weekTitle": "1 haftadan so'ng – {{date}} – {{weight}} kg",
+      "weekDesc": "Birinchi natijalar: {{change}} kg {{direction}}. Bu sog'lom odatlar va ovqatlanish munosabatini tuzatishdagi ilk g'alaba.",
+      "goalTitle": "{{months}} oydan so'ng – {{date}} – {{weight}} kg",
+      "goalDesc": "Siz {{directionVerb}} {{change}} kg maqsadga yetasiz. O'zingizni yaxshi, sergak va erishilgan natijadan faxrlangan his qilasiz.",
+      "directions": {
+        "lose": "yo'qotish",
+        "gain": "oshirish",
+        "loseVerb": "yo'qotish",
+        "gainVerb": "oshirish"
+      }
+    },
+    "health": {
+      "title": "{{service}} xizmatiga ulang",
+      "subtitle": "Welmi va {{service}} o'rtasida kunlik faollikni sinxronlab, kaloriya maqsadlarini aniq saqlaymiz.",
+      "list": {
+        "steps": "Qadamlar, masofa va faol kaloriyalar",
+        "workouts": "Mashg'ulot va vazn yangilanishlari",
+        "hydration": "Welmi'da kiritgan suyuqliklar"
+      },
+      "connected": "{{service}} bilan ulandi",
+      "connect": "{{service}} xizmatiga ulanish",
+      "skip": "Hozircha o'tkazib yuborish",
+      "services": {
+        "apple": "Apple Health",
+        "google": "Google Fit",
+        "default": "sog'liq ma'lumoti"
+      }
+    },
+    "burned": {
+      "title": "Kaloriya hisoblagichini Welmi yangilab borsin",
+      "walking": "Piyoda",
+      "gym": "Zal",
+      "addBurned": "+{{calories}} kkal"
+    },
+    "progressCheck": {
+      "title": "Birinchi natija tekshiruvi kunini belgilang",
+      "subtitle": "Tarozi ma'lumotlari bo'yicha taraqqiyotni kuzatamiz va kerak bo'lsa sozlaymiz",
+      "expectedDrop": "Kutilgan o'zgarish: {{weight}} kg",
+      "note": "Tanangiz sog'lom odatlarga moslashayotganda o'zingizni boshqacha his qilasiz — bu tabiiy jarayon."
+    },
+    "disclaimer": {
+      "title": "Ehtiyotkorlik bilan yo'l-yo'riq",
+      "text": "Welmi sog'liq profilingiz va ovqatlanish ehtiyojlaringizga mos tavsiyalar beradi.",
+      "textSmall": "Lekin ilova shifokor maslahatining o'rnini bosa olmaydi. Yangi parhez boshlashdan oldin yoki salomatlik bo'yicha savollaringiz bo'lsa, mutaxassisga murojaat qiling.",
+      "cta": "Tushunarli, davom etamiz",
+      "loading": "Sozlanmoqda..."
+    },
+    "signin": {
+      "title": "Yana bir qadam qoldi!",
+      "subtitle": "Shaxsiy sozlamalaringizni saqlash uchun akkauntingizdan foydalaning.",
+      "apple": "Apple orqali davom etish",
+      "google": "Google orqali davom etish",
+      "phone": "Telefon raqami bilan davom etish"
+    },
+    "modal": {
+      "title": "Telefon raqamingizni kiriting",
+      "subtitle": "Aloqa uchun xalqaro kodni ham yozing.",
+      "passwordPlaceholder": "Parol (kamida 6 ta belgi)",
+      "cancel": "Bekor qilish",
+      "submit": "Yuborish"
+    },
+    "meta": {
+      "suggestedSteps": "{{goal}} uchun tavsiya: kuniga {{steps}} qadam"
+    },
+    "toasts": {
+      "phoneSavedTitle": "Telefon saqlandi",
+      "phoneSavedMessage": "Bu raqam akkauntingiz uchun ishlatiladi.",
+      "verificationNeededTitle": "Tasdiqlash kerak",
+      "verificationNeededMessage": "Iltimos, akkauntni tasdiqlab, qayta urining.",
+      "errorTitle": "Xato",
+      "signInRequiredTitle": "Kirish talab qilinadi",
+      "signInRequiredMessage": "Davom etish uchun kiring yoki akkaunt yarating.",
+      "connectedTitle": "Ulandi",
+      "connectedMessage": "Welmi {{service}} bilan sinxronlashishi mumkin.",
+      "healthFailedTitle": "Sog'liq ma'lumotlariga ulanish muvaffaqiyatsiz",
+      "profileCreatedTitle": "Profil yaratildi",
+      "profileCreatedMessage": "Xush kelibsiz!"
+    }
+  },
+  "diary": {
+    "title": "Kundalik",
+    "date": "{{date}}",
+    "today": "Bugun",
+    "eaten": "Yegan",
+    "burned": "Yoqilgan",
+    "kcalLeft": "kkal qoldi",
+    "carbs": "Uglevodlar",
+    "protein": "Oqsil",
+    "fats": "Yog'",
+    "steps": "Qadamlar",
+    "stepsLabel": "{{count}} qadam",
+    "water": "Suv",
+    "journal": "Jurnal",
+    "empty": "Bugun hali ovqat yozilmadi",
+    "mealFallback": "Taom",
+    "kcal": "{{value}} kkal"
+  },
+  "add": {
+    "title": "Ovqat qo'shish",
+    "photo": {
+      "title": "Rasmga oling",
+      "subtitle": "AI ovqatni aniqlab, kaloriyani taxmin qiladi"
+    },
+    "search": {
+      "title": "Ovqatlarni qidirish",
+      "subtitle": "Ma'lumotlar bazamizni ko'rib chiqing"
+    },
+    "barcode": {
+      "title": "Shtrixkod skaner",
+      "subtitle": "Qadoqlangan mahsulot yorlig'ini o'qing"
+    },
+    "voice": {
+      "title": "Ovoz bilan kiritish",
+      "subtitle": "Nima yeganingizni ayting"
+    }
+  },
+  "addSearch": {
+    "title": "Ovqatlarni qidirish",
+    "placeholder": "Ovqat nomini yozing...",
+    "nutrients": {
+      "calories": "Kaloriya",
+      "protein": "Oqsil",
+      "carbs": "Uglevod",
+      "fats": "Yog'"
+    },
+    "quantity": "Miqdor ({{unit}})",
+    "back": "Ortga",
+    "save": "Saqlash",
+    "resultDetails": "{{calories}} kkal, {{size}} {{unit}} uchun",
+    "searchError": "Ovqatlarni qidirishda xato",
+    "saveSuccess": "Taom kundalikka saqlandi",
+    "saveError": "Taomni saqlashda xato"
+  },
+  "addBarcode": {
+    "title": "Shtrixkod skaner",
+    "description": "Kamera orqali mahsulot shtrixkodini o'qiymiz",
+    "openScanner": "Kamera skanerini ochish",
+    "manualLabel": "Shtrixkodni qo'lda kiriting",
+    "placeholder": "123456789012",
+    "lookup": "Mahsulotni topish",
+    "back": "Ortga"
+  },
+  "addPhoto": {
+    "title": "Rasm orqali kiritish",
+    "changePhoto": "Rasmni almashtirish",
+    "takePhoto": "Rasmga oling yoki yuklang",
+    "analyzing": "Tahlil qilinmoqda...",
+    "analyze": "Rasmni tahlil qilish",
+    "detected": "Aniqlangan ovqatlar",
+    "fields": {
+      "grams": "Gram",
+      "calories": "Kaloriya",
+      "protein": "Oqsil (g)",
+      "carbs": "Uglevod (g)",
+      "fats": "Yog' (g)"
+    },
+    "saveMeal": "Taomni saqlash",
+    "noFoodTitle": "Ovqat topilmadi",
+    "noFoodDescription": "Taomni aniqroq ko'rsatib ko'ring",
+    "cameraDeniedTitle": "Kamera ruxsati yo'q",
+    "cameraDeniedDescription": "Rasmga olish uchun sozlamalardan ruxsat bering.",
+    "errorAnalyze": "Rasmni tahlil qilishda xato",
+    "errorSave": "Taomni saqlab bo'lmadi",
+    "photoMealName": "Foto taom"
+  },
+  "addVoice": {
+    "title": "Ovozli kiritish",
+    "listening": "Eshitilmoqda...",
+    "processing": "Qayta ishlanmoqda...",
+    "startRecording": "Yozishni boshlash",
+    "instruction": "Tugmani bosing va nima yeganingizni ayting",
+    "example": "Misol: \"Ikki dona tuxum va bir bo'lak tost\"",
+    "unavailableTitle": "Mavjud emas",
+    "unavailableDescription": "Bu yig'ilishda ovozli tanish mavjud emas.",
+    "notSupportedTitle": "Qo'llab-quvvatlanmaydi",
+    "notSupportedDescription": "Nutqni aniqlash ishlamadi yoki mavjud emas",
+    "speechError": "Nutqni aniqlab bo'lmadi",
+    "noFoodTitle": "Ovqat topilmadi",
+    "noFoodDescription": "Nima yeganingizni aniqroq ayting",
+    "successDescription": "Taom kundalikka saqlandi",
+    "errorProcess": "Ovozli kiritishni qayta ishlashda xato",
+    "back": "Ortga",
+    "voiceMealName": "Ovoz orqali kiritilgan taom"
+  },
+  "recipes": {
+    "title": "Retseptlar",
+    "filter": "Filtr",
+    "favorites": "Sevimlilar",
+    "popular": "Ommabop",
+    "mealTypes": {
+      "breakfast": "Nonushta",
+      "lunch": "Tushlik",
+      "dinner": "Kechki ovqat",
+      "snack": "Tamaddi"
+    },
+    "noImage": "Rasm yo'q",
+    "empty": "Retseptlar topilmadi",
+    "prep": "Tayyorlash: {{time}}",
+    "servings": "Porsiya: {{count}}"
+  },
+  "recipeDetail": {
+    "notFound": "Retsept topilmadi.",
+    "noImage": "Rasm yo'q",
+    "anyMeal": "Har qanday ovqat",
+    "prep": "Tayyorlash: {{time}}",
+    "servings": "Porsiya: {{count}}",
+    "macros": "Makrolar",
+    "macroSummary": "{{calories}} kkal · O {{protein}} · U {{carbs}} · Y {{fats}}"
+  },
+  "progress": {
+    "header": "Oxirgi kiritma, {{date}}",
+    "start": "Boshlanish",
+    "goal": "Maqsad",
+    "currentWeight": "Joriy vazn",
+    "planTitle": "Reja",
+    "planBody": "Metabolizmingiz {{burn}} kkal yoqadi va kunlik maqsad {{goal}} kkal. 500 kkal tanqislik bilan haftasiga taxminan 1 kg yo'qotib, {{date}} sanasiga maqsadga yetasiz.",
+    "planReminder": "Natijaga yopishish uchun har kuni ovqatlarni kundalikka yozib boring.",
+    "bmiTitle": "Tana massasi indeksi",
+    "bmiBadge": "E'tibor kerak ⚖️",
+    "bmiInfo": "JSSTga ko'ra, BMI ni sog'lom oraliqqa tushirish surunkali kasalliklar xavfini kamaytiradi va farovonlikni oshiradi.",
+    "logMeasurements": "O'lchovlarni kiritish"
+  },
+  "settings": {
+    "title": "Sozlamalar",
+    "customerSupport": "Yordam xizmati",
+    "sections": {
+      "dailyGoals": "Kunlik maqsadlar",
+      "plan": "Reja",
+      "personalization": "Shaxsiylashtirish",
+      "language": "Til"
+    },
+    "rows": {
+      "calories": "Kaloriya va makro",
+      "steps": "Qadamlar",
+      "hydration": "Suv",
+      "burned": "Yoqilgan kaloriyalarni qo'shish",
+      "weeklyGoal": "Haftalik maqsad",
+      "activity": "Faollik darajasi",
+      "currentWeight": "Joriy vazn",
+      "goalWeight": "Maqsad vazn",
+      "gender": "Jins",
+      "age": "Yosh",
+      "height": "Bo'y",
+      "language": "Til"
+    },
+    "values": {
+      "perWeek": "Haftasiga {{value}} kg",
+      "inactive": "Harakatsiz",
+      "light": "Yengil",
+      "moderate": "O'rtacha",
+      "active": "Faol",
+      "veryActive": "Juda faol",
+      "male": "Erkak",
+      "female": "Ayol",
+      "other": "Boshqa"
+    },
+    "signOut": "Chiqish",
+    "modals": {
+      "caloriesTitle": "Kunlik kaloriya maqsadi",
+      "caloriesLabel": "Kaloriya (kkal)",
+      "stepsTitle": "Kunlik qadam maqsadi",
+      "stepsLabel": "Qadamlar",
+      "waterTitle": "Kunlik suv maqsadi",
+      "waterLabel": "Suv (ml)",
+      "activityTitle": "Faollik darajasi",
+      "currentWeightTitle": "Joriy vazn",
+      "goalWeightTitle": "Maqsad vazn",
+      "weightLabel": "Vazn (kg)",
+      "genderTitle": "Jins",
+      "ageTitle": "Yosh",
+      "ageLabel": "Yosh (yil)",
+      "heightTitle": "Bo'y",
+      "heightLabel": "Bo'y (sm)",
+      "close": "Yopish",
+      "save": "Saqlash"
+    },
+    "language": {
+      "current": "Joriy til",
+      "options": {
+        "uzLatn": "O'zbek (Lotin)",
+        "uzCyrl": "O'zbek (Кирилл)",
+        "en": "Inglizcha",
+        "ru": "Русский"
+      }
+    },
+    "toasts": {
+      "updated": "Muvaffaqiyatli yangilandi",
+      "updatedDescription": "Profil yangilandi."
+    }
+  },
+  "health": {
+    "googleCancelled": "Google Fit ruxsati bekor qilindi.",
+    "googleError": "Google Fit bilan ulanishda xato. Qayta urinib ko'ring.",
+    "appleUnavailable": "Apple Health mavjud emas. HealthKit bilan qayta qurib, qurilmaga o'rnating.",
+    "appleDenied": "Apple Health ruxsatlari berilmadi. Qayta urinib ko'ring.",
+    "appleUnavailableDevice": "Apple Health bu qurilmada mavjud emas.",
+    "unavailable": "Sog'liq ruxsatlari faqat iOS yoki Android qurilmalarda mavjud."
+  }
+}

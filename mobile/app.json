@@ -1,0 +1,41 @@
+{
+  "expo": {
+    "name": "NourishLens",
+    "slug": "nourish-lens-mobile",
+    "scheme": "nourishlens",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0b132b"
+      },
+      "permissions": ["ACTIVITY_RECOGNITION"]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "replace-with-your-eas-id"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "react-native-health",
+        {
+          "healthSharePermission": "Allow Welmi to read your activity and weight data from Apple Health.",
+          "healthUpdatePermission": "Allow Welmi to write workouts and steps to Apple Health."
+        }
+      ],
+      "react-native-google-fit"
+    ]
+  }
+}
