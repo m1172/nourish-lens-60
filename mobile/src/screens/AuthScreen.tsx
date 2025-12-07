@@ -35,8 +35,9 @@ export default function AuthScreen() {
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
 
-  const { signIn } = useAuth();
+  const { signIn, signUp } = useAuth();
   const { toast } = useToast();
   const navigation = useNavigation<any>();
   const { t } = useTranslation();
@@ -82,33 +83,55 @@ export default function AuthScreen() {
 
     try {
       const fullPhone = `+${country.dial}${digitsOnly}`;
-      const { error, user: signedInUser } = await signIn(fullPhone, password);
-
-      if (signedInUser) {
-        console.log('Sign in success', signedInUser.id);
-        toast({
-          title: t('auth.welcomeToast'),
-        });
-        return;
-      }
-
-      if (error) {
-        // console.error('Sign in error', error);
-        toast({
-          variant: 'destructive',
-          title: t('common.error'),
-          description: error.message,
-        });
+      
+      if (isSignUp) {
+        // Sign up flow
+        const { error, user: newUser } = await signUp(fullPhone, password);
+        
+        if (newUser) {
+          console.log('Sign up success', newUser.id);
+          toast({
+            title: t('auth.signUpSuccess') || 'Account created successfully!',
+          });
+          return;
+        }
+        
+        if (error) {
+          toast({
+            variant: 'destructive',
+            title: t('common.error'),
+            description: error.message,
+          });
+        }
       } else {
-        console.error('Sign in failed with no user or error');
-        toast({
-          variant: 'destructive',
-          title: t('common.error'),
-          description: t('auth.signInUnknown'),
-        });
+        // Sign in flow
+        const { error, user: signedInUser } = await signIn(fullPhone, password);
+
+        if (signedInUser) {
+          console.log('Sign in success', signedInUser.id);
+          toast({
+            title: t('auth.welcomeToast'),
+          });
+          return;
+        }
+
+        if (error) {
+          toast({
+            variant: 'destructive',
+            title: t('common.error'),
+            description: error.message,
+          });
+        } else {
+          console.error('Sign in failed with no user or error');
+          toast({
+            variant: 'destructive',
+            title: t('common.error'),
+            description: t('auth.signInUnknown'),
+          });
+        }
       }
     } catch (err: any) {
-      console.error('Sign in exception', err);
+      console.error('Auth exception', err);
       toast({
         variant: 'destructive',
         title: t('common.error'),
@@ -172,7 +195,9 @@ export default function AuthScreen() {
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.appName}>{t('auth.title')}</Text>
-            <Text style={styles.subtitle}>{t('auth.welcomeBack')}</Text>
+            <Text style={styles.subtitle}>
+              {isSignUp ? (t('auth.createAccount') || 'Create your account') : t('auth.welcomeBack')}
+            </Text>
           </View>
 
           {/* Form */}
@@ -274,9 +299,23 @@ export default function AuthScreen() {
                   <Text style={styles.buttonText}>{t('common.loading')}</Text>
                 </View>
               ) : (
-                <Text style={styles.buttonText}>{t('auth.signIn')}</Text>
+                <Text style={styles.buttonText}>
+                  {isSignUp ? (t('auth.signUp') || 'Sign Up') : t('auth.signIn')}
+                </Text>
               )}
             </Button>
+
+            {/* Toggle Sign In / Sign Up */}
+            <TouchableOpacity
+              style={styles.toggleWrapper}
+              onPress={() => setIsSignUp((v) => !v)}
+            >
+              <Text style={styles.toggleText}>
+                {isSignUp
+                  ? (t('auth.haveAccount') || 'Already have an account? Sign In')
+                  : (t('auth.noAccount') || "Don't have an account? Sign Up")}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* Divider: "Or continue with" */}
