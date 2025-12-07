@@ -64,25 +64,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     identifier: string,
     password: string
   ): {
-    type: 'phone' | 'email';
-    phone?: string;
-    email?: string;
-    aliasEmail?: string;
+    email: string;
     password: string;
   } => {
-    const trimmed = identifier.trim();
-    const phoneRegex = /^\+?\d{6,15}$/;
-    if (phoneRegex.test(trimmed)) {
-      const digits = trimmed.replace(/\D/g, '');
-      const withPlus = trimmed.startsWith('+') ? trimmed : `+${digits}`;
-      return {
-        type: 'phone',
-        phone: withPlus,
-        aliasEmail: `${digits}@phone.welmi`, // fallback when phone signups are disabled
-        password,
-      };
-    }
-    return { type: 'email', email: trimmed.toLowerCase(), password };
+    // Now we only support email-based auth
+    return { email: identifier.trim().toLowerCase(), password };
   };
 
   const signUp = async (
@@ -92,64 +78,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ) => {
     const credentials = buildCredentials(identifier, password);
 
-    const attemptSignUp = (payload: {
-      email?: string;
-      phone?: string;
-      password: string;
-    }) => supabase.auth.signUp(payload);
+    const { data, error } = await supabase.auth.signUp({
+      email: credentials.email,
+      password: credentials.password,
+    });
 
-    let data:
-      | {
-          user: User | null;
-        }
-      | null = null;
-    let error: any = null;
-
-    if (credentials.type === 'phone' && credentials.phone) {
-      const phonePayload = { phone: credentials.phone, password };
-      ({ data, error } = await attemptSignUp(phonePayload));
-
-      // Fallback to email alias when phone signups are disabled
-      const phoneDisabled =
-        error &&
-        typeof error.message === 'string' &&
-        /phone.*disabled/i.test(error.message);
-      if (phoneDisabled && credentials.aliasEmail) {
-        ({ data, error } = await attemptSignUp({
-          email: credentials.aliasEmail,
-          password,
-        }));
-      }
-
-      // If account already exists (via alias), try signing in
-      if (
-        error &&
-        typeof error.message === 'string' &&
-        /already registered/i.test(error.message) &&
-        credentials.aliasEmail
-      ) {
-        const { data: signInData, error: signInError } =
-          await supabase.auth.signInWithPassword({
-            email: credentials.aliasEmail,
-            password,
-          });
-        if (!signInError) {
-          data = signInData as any;
-          error = null;
-        }
-      }
-    } else {
-      ({ data, error } = await attemptSignUp({
-        email: credentials.email,
-        password,
-      }));
-    }
-
-    if (!error) {
+    if (!error && data?.user) {
       if (!options.skipRedirect) {
         resetTo('Onboarding');
       }
-      return { error, user: data?.user ?? null };
+      return { error: null, user: data.user };
     }
 
     return { error, user: null };
@@ -161,53 +99,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     options: { skipRedirect?: boolean } = {}
   ) => {
     const credentials = buildCredentials(identifier, password);
-    const attemptSignIn = (payload: {
-      email?: string;
-      phone?: string;
-      password: string;
-    }) => supabase.auth.signInWithPassword(payload);
 
-    let data: { user: User | null } | null = null;
-    let error: any = null;
-
-    if (credentials.type === 'phone' && credentials.phone) {
-      const attempts: Array<() => Promise<void>> = [];
-
-      // Try alias email first (covers fallback signups when phone auth is disabled)
-      if (credentials.aliasEmail) {
-        attempts.push(async () => {
-          const res = await attemptSignIn({
-            email: credentials.aliasEmail,
-            password,
-          });
-          data = res.data as any;
-          error = res.error;
-          if (!error) {
-            return;
-          }
-        });
-      }
-
-      // Then try phone login
-      attempts.push(async () => {
-        const res = await attemptSignIn({
-          phone: credentials.phone,
-          password,
-        });
-        data = res.data as any;
-        error = res.error;
-      });
-
-      for (const attempt of attempts) {
-        await attempt();
-        if (!error && data?.user) break;
-      }
-    } else {
-      ({ data, error } = await attemptSignIn({
-        email: credentials.email,
-        password,
-      }));
-    }
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: credentials.email,
+      password: credentials.password,
+    });
 
     if (!error && data?.user) {
       if (!options.skipRedirect) {
@@ -223,16 +119,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           resetTo('Onboarding');
         }
       }
-    } else if (error) {
+      return { error: null, user: data.user };
+    }
+
+    if (error) {
       console.error('Sign-in failed', {
-        type: credentials.type,
-        aliasTried: !!credentials.aliasEmail,
         message: error?.message,
         status: error?.status,
       });
     }
 
-    return { error, user: data?.user ?? null };
+    return { error, user: null };
   };
 
   const signOut = async () => {
