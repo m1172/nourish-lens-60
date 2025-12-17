@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Expo / Metro
+.expo/
+.expo-shared/
+.expo/**/*
+dist/
+web-build/
+
+# Native builds and tooling
+android/.gradle/
+android/app/build/
+android/local.properties
+android/gradle.properties
+ios/Pods/
+ios/build/
+ios/DerivedData/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+
+# Logs and caches
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env.production
+.env.development
+
+# OS
+.DS_Store
